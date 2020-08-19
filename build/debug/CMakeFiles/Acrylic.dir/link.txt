@@ -1,1 +1,0 @@
-/usr/bin/c++  -g   CMakeFiles/Acrylic.dir/main.cpp.o  -o Acrylic 

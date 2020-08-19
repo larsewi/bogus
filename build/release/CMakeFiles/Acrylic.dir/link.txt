@@ -1,1 +1,0 @@
-/usr/bin/c++  -O3 -DNDEBUG   CMakeFiles/Acrylic.dir/main.cpp.o  -o Acrylic 
