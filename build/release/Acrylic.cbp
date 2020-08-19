@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="Acrylic"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\engine\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\usr\;CMake Files\..\..\..\..\usr\local\;CMake Files\..\..\..\..\usr\local\lib\;CMake Files\..\..\..\..\usr\local\lib\cmake\;CMake Files\..\..\..\..\usr\local\lib\cmake\glfw3\;CMake Files\sandbox\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/larsewi/Documents/Acrylic/build/release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/larsewi/Documents/Acrylic/build/release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/larsewi/Documents/Acrylic/build/release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="acrylic">
+				<Option output="/home/larsewi/Documents/Acrylic/build/release/engine/libacrylic.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/larsewi/Documents/Acrylic/build/release/engine"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/larsewi/Documents/Acrylic/engine"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/engine/Makefile&quot;  VERBOSE=1 acrylic"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/engine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/engine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/engine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="acrylic/fast">
+				<Option output="/home/larsewi/Documents/Acrylic/build/release/engine/libacrylic.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/larsewi/Documents/Acrylic/build/release/engine"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/larsewi/Documents/Acrylic/engine"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/engine/Makefile&quot;  VERBOSE=1 acrylic/fast"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/engine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/engine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/engine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="game">
+				<Option output="/home/larsewi/Documents/Acrylic/build/release/sandbox/game" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/larsewi/Documents/Acrylic/build/release/sandbox"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/larsewi/Documents/Acrylic/engine"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/sandbox/Makefile&quot;  VERBOSE=1 game"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/sandbox/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/sandbox/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/sandbox/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="game/fast">
+				<Option output="/home/larsewi/Documents/Acrylic/build/release/sandbox/game" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/larsewi/Documents/Acrylic/build/release/sandbox"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/larsewi/Documents/Acrylic/engine"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/sandbox/Makefile&quot;  VERBOSE=1 game/fast"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/sandbox/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/sandbox/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/larsewi/Documents/Acrylic/build/release/sandbox/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/larsewi/Documents/Acrylic/engine/Application.cpp">
+			<Option target="acrylic"/>
+		</Unit>
+		<Unit filename="/home/larsewi/Documents/Acrylic/engine/Application.h">
+			<Option target="acrylic"/>
+		</Unit>
+		<Unit filename="/home/larsewi/Documents/Acrylic/engine/Logger.h">
+			<Option target="acrylic"/>
+		</Unit>
+		<Unit filename="/home/larsewi/Documents/Acrylic/engine/Window.cpp">
+			<Option target="acrylic"/>
+		</Unit>
+		<Unit filename="/home/larsewi/Documents/Acrylic/engine/Window.h">
+			<Option target="acrylic"/>
+		</Unit>
+		<Unit filename="/home/larsewi/Documents/Acrylic/sandbox/SandboxApp.cpp">
+			<Option target="game"/>
+		</Unit>
+		<Unit filename="/home/larsewi/Documents/Acrylic/sandbox/SandboxApp.h">
+			<Option target="game"/>
+		</Unit>
+		<Unit filename="/home/larsewi/Documents/Acrylic/sandbox/main.cpp">
+			<Option target="game"/>
+		</Unit>
+		<Unit filename="/home/larsewi/Documents/Acrylic/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/larsewi/Documents/Acrylic/engine/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\engine\"/>
+		</Unit>
+		<Unit filename="/home/larsewi/Documents/Acrylic/../../../../usr/local/lib/cmake/glfw3/glfw3Config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\glfw3\"/>
+		</Unit>
+		<Unit filename="/home/larsewi/Documents/Acrylic/../../../../usr/local/lib/cmake/glfw3/glfw3ConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\glfw3\"/>
+		</Unit>
+		<Unit filename="/home/larsewi/Documents/Acrylic/../../../../usr/local/lib/cmake/glfw3/glfw3Targets-noconfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\glfw3\"/>
+		</Unit>
+		<Unit filename="/home/larsewi/Documents/Acrylic/../../../../usr/local/lib/cmake/glfw3/glfw3Targets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\glfw3\"/>
+		</Unit>
+		<Unit filename="/home/larsewi/Documents/Acrylic/sandbox/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\sandbox\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

@@ -1,0 +1,8 @@
+/home/larsewi/Documents/Acrylic/build/debug/CMakeFiles/rebuild_cache.dir
+/home/larsewi/Documents/Acrylic/build/debug/CMakeFiles/edit_cache.dir
+/home/larsewi/Documents/Acrylic/build/debug/engine/CMakeFiles/rebuild_cache.dir
+/home/larsewi/Documents/Acrylic/build/debug/engine/CMakeFiles/edit_cache.dir
+/home/larsewi/Documents/Acrylic/build/debug/engine/CMakeFiles/acrylic.dir
+/home/larsewi/Documents/Acrylic/build/debug/sandbox/CMakeFiles/rebuild_cache.dir
+/home/larsewi/Documents/Acrylic/build/debug/sandbox/CMakeFiles/edit_cache.dir
+/home/larsewi/Documents/Acrylic/build/debug/sandbox/CMakeFiles/game.dir

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libacrylic.a  CMakeFiles/acrylic.dir/Application.cpp.o CMakeFiles/acrylic.dir/Window.cpp.o
+/usr/bin/ranlib libacrylic.a

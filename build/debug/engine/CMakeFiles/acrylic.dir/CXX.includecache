@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/larsewi/Documents/Acrylic/engine/Application.cpp
+Application.h
+/home/larsewi/Documents/Acrylic/engine/Application.h
+Logger.h
+/home/larsewi/Documents/Acrylic/engine/Logger.h
+
+/home/larsewi/Documents/Acrylic/engine/Application.h
+string
+-
+vector
+-
+Window.h
+/home/larsewi/Documents/Acrylic/engine/Window.h
+
+/home/larsewi/Documents/Acrylic/engine/Logger.h
+cstdio
+-
+cstdarg
+-
+
+/home/larsewi/Documents/Acrylic/engine/Window.h
+string
+-
+GLFW/glfw3.h
+-
+

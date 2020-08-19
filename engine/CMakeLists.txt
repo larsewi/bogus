@@ -1,0 +1,11 @@
+
+add_library(acrylic Application.cpp Application.h Window.cpp Window.h Logger.h)
+
+find_package(Vulkan REQUIRED)
+target_include_directories(acrylic PUBLIC ${Vulkan_INCLUDE_DIRS})
+target_link_libraries(acrylic Vulkan::Vulkan)
+
+find_package(glfw3 REQUIRED)
+target_link_libraries(acrylic glfw)
+
+target_include_directories(acrylic PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
