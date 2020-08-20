@@ -27,25 +27,25 @@
 #endif
 
 #if LOGGER_LOG_ERROR
-#define LOG_ERROR(...) log_f(__FILE__, __func__, __LINE__, 0, __VA_ARGS__);
+#define LOG_ERROR(...) log_f(__FILE__, __func__, __LINE__, 0, __VA_ARGS__)
 #else
 #define LOG_ERROR(...)
 #endif
 
 #if LOGGER_LOG_WARNING
-#define LOG_WARNING(...) log_f(__FILE__, __func__, __LINE__, 1, __VA_ARGS__);
+#define LOG_WARNING(...) log_f(__FILE__, __func__, __LINE__, 1, __VA_ARGS__)
 #else
 #define LOG_WARNING(...)
 #endif
 
 #if LOGGER_LOG_INFO
-#define LOG_INFO(...) log_f(__FILE__, __func__, __LINE__, 2, __VA_ARGS__);
+#define LOG_INFO(...) log_f(__FILE__, __func__, __LINE__, 2, __VA_ARGS__)
 #else
 #define LOG_INFO(...)
 #endif
 
 #if LOGGER_LOG_DEBUG
-#define LOG_DEBUG(...) log_f(__FILE__, __func__, __LINE__, 3, __VA_ARGS__);
+#define LOG_DEBUG(...) log_f(__FILE__, __func__, __LINE__, 3, __VA_ARGS__)
 #else
 #define LOG_DEBUG(...)
 #endif

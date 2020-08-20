@@ -18,6 +18,7 @@ public:
     static void pollEvents() { glfwPollEvents(); }
 
 private:
+    static int count;
     GLFWwindow* m_pGLFWwindow;
 };
 
