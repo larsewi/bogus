@@ -6,6 +6,7 @@
 #define ACRYLIC_WINDOW_H
 
 #include <string>
+#include <vector>
 #include <GLFW/glfw3.h>
 
 
@@ -16,6 +17,8 @@ public:
 
     bool shouldClose() { return glfwWindowShouldClose(m_pGLFWwindow) != 0; }
     static void pollEvents() { glfwPollEvents(); }
+
+    static std::vector<const char*> getRequiredExtensions();
 
 private:
     static int count;

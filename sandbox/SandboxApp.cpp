@@ -8,7 +8,7 @@ SandboxApp::SandboxApp(int width, int height, const std::string& title) : Applic
 
 }
 
-void SandboxApp::onBegin() {
+void SandboxApp::onInit() {
 
 }
 

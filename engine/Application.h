@@ -6,9 +6,9 @@
 #define ACRYLIC_APPLICATION_H
 
 #include <string>
-#include <vector>
 
 #include "Window.h"
+#include "Instance.h"
 
 class Application {
 public:
@@ -18,7 +18,7 @@ public:
     void run();
 
 protected:
-    virtual void onBegin() {};
+    virtual void onInit() {};
     virtual void onEvent() {};
     virtual void onUpdate() {};
     virtual void onDraw() {};
@@ -29,8 +29,10 @@ private:
     void update();
     void render();
 
-    bool m_isRunning;
     Window* m_pWindow;
+    Instance* m_pInstance;
+
+    bool m_bShouldRun;
 };
 
 #endif //ACRYLIC_APPLICATION_H

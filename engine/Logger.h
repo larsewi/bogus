@@ -8,12 +8,9 @@
 #include <cstdio>
 #include <cstdarg>
 
-#define CNRM            "\x1B[0m"
-#define CRED            "\x1B[31m"
-#define CYEL            "\x1B[33m"
-#define CMAG            "\x1B[35m"
-#define CCYN            "\x1B[36m"
-
+/**
+ * Select desired logger types for debug and release.
+ */
 #ifndef NDEBUG
 #define LOGGER_LOG_ERROR 1
 #define LOGGER_LOG_WARNING 1
@@ -27,46 +24,55 @@
 #endif
 
 #if LOGGER_LOG_ERROR
-#define LOG_ERROR(...) log_f(__FILE__, __func__, __LINE__, 0, __VA_ARGS__)
+#define LOG_ERROR(...) logger::log_f(__FILE__, __func__, __LINE__, "ERROR", LOGGER_RED, stderr, __VA_ARGS__)
 #else
 #define LOG_ERROR(...)
 #endif
 
 #if LOGGER_LOG_WARNING
-#define LOG_WARNING(...) log_f(__FILE__, __func__, __LINE__, 1, __VA_ARGS__)
+#define LOG_WARNING(...) logger::log_f(__FILE__, __func__, __LINE__, "WARNING", LOGGER_YEL, stdout, __VA_ARGS__)
 #else
 #define LOG_WARNING(...)
 #endif
 
 #if LOGGER_LOG_INFO
-#define LOG_INFO(...) log_f(__FILE__, __func__, __LINE__, 2, __VA_ARGS__)
+#define LOG_INFO(...) logger::log_f(__FILE__, __func__, __LINE__, "INFO", LOGGER_MAG, stdout, __VA_ARGS__)
 #else
 #define LOG_INFO(...)
 #endif
 
 #if LOGGER_LOG_DEBUG
-#define LOG_DEBUG(...) log_f(__FILE__, __func__, __LINE__, 3, __VA_ARGS__)
+#define LOG_DEBUG(...) logger::log_f(__FILE__, __func__, __LINE__, "DEBUG", LOGGER_CYN, stdout, __VA_ARGS__)
 #else
 #define LOG_DEBUG(...)
 #endif
 
-static void log_f(const char* file, const char* func, int line, int type, const char* fmt, ...) {
-    va_list ap;
-    const char *logType, *color;
-    FILE *filePtr;
+/**
+ * Logger colors.
+ */
+#define LOGGER_NRM "\x1B[0m"
+#define LOGGER_RED "\x1B[31m"
+#define LOGGER_YEL "\x1B[33m"
+#define LOGGER_MAG "\x1B[35m"
+#define LOGGER_CYN "\x1B[36m"
 
-    switch (type) {
-        case 0:  logType = "ERROR";   color = CRED; filePtr = stderr; break;
-        case 1:  logType = "WARNING"; color = CYEL; filePtr = stdout; break;
-        case 2:  logType = "INFO";    color = CMAG; filePtr = stdout; break;
-        default: logType = "DEBUG";   color = CCYN; filePtr = stdout;
+namespace logger {
+    namespace {
+        void log_f(
+                const char *file, const char *func, int line,
+                const char *type, const char *color, FILE *filePtr,
+                const char *format, ...
+        ) {
+            va_list ap;
+            va_start(ap, format);
+
+            fprintf(filePtr, "[%s%s%s][%s:%d in %s]: ", color, type, LOGGER_NRM, file, line, func);
+            fprintf(filePtr, format, ap);
+            fprintf(filePtr, "\n");
+
+            va_end(ap);
+        }
     }
-
-    va_start(ap, fmt);
-    fprintf(filePtr, "[%s%s%s][%s:%d in %s]: ", color, logType, CNRM, file, line, func);
-    fprintf(filePtr, fmt, ap);
-    fprintf(filePtr, "\n");
-    va_end(ap);
 }
 
 #endif //ACRYLIC_LOGGER_H

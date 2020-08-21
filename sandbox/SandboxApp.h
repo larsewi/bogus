@@ -13,7 +13,7 @@ public:
     ~SandboxApp() override = default;
 
 protected:
-    void onBegin() override;
+    void onInit() override;
     void onEvent() override;
     void onUpdate() override;
     void onDraw() override;
