@@ -5,11 +5,16 @@
 #ifndef ACRYLIC_INSTANCE_H
 #define ACRYLIC_INSTANCE_H
 
+#ifdef NDEBUG
+#define ENABLE_VALIDATION_LAYERS false
+#else
+#define ENABLE_VALIDATION_LAYERS true
+#endif
+
 #include <vector>
 #include <vulkan/vulkan.h>
 
 #include "Window.h"
-#include "DebugMessenger.h"
 
 class Instance {
 public:
@@ -18,12 +23,11 @@ public:
 
 private:
     VkInstance m_pVkInstance;
-    DebugMessenger* m_pDebugMessenger;
+    VkDebugUtilsMessengerEXT m_pDebugMessenger;
 
     const std::vector<const char*> m_validationLayers;
 
     bool validationLayerSupported();
 };
-
 
 #endif //ACRYLIC_INSTANCE_H
