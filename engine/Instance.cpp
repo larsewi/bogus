@@ -71,12 +71,15 @@ m_validationLayers({"VK_LAYER_KHRONOS_validation"}) {
     createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
     createInfo.ppEnabledExtensionNames = extensions.data();
 
+    LOG_DEBUG("Creating Vk Instance");
     if (vkCreateInstance(&createInfo, nullptr, &m_pVkInstance) != VK_SUCCESS) {
         throw std::runtime_error("failed to create instance!");
     }
 
-    if (CreateDebugUtilsMessengerEXT(m_pVkInstance, &debugCreateInfo, nullptr, &m_pDebugMessenger) != VK_SUCCESS) {
-        throw std::runtime_error("failed to set up debug messenger!");
+    if(ENABLE_VALIDATION_LAYERS && validationLayerSupported()) {
+        LOG_DEBUG("Creating debug messenger");
+        if (CreateDebugUtilsMessengerEXT(m_pVkInstance, &debugCreateInfo, nullptr, &m_pDebugMessenger) != VK_SUCCESS)
+            throw std::runtime_error("failed to set up debug messenger!");
     }
 }
 

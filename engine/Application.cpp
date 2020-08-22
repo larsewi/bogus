@@ -3,6 +3,7 @@
 //
 
 #include <stdexcept>
+
 #include "Application.h"
 #include "Logger.h"
 
