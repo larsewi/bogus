@@ -10,20 +10,23 @@
 
 #include "Window.h"
 #include "DebugMessenger.h"
+#include "Logger.h"
 
 namespace Bogus {
     class Instance {
     public:
-        explicit Instance(Window* window);
+        explicit Instance();
         ~Instance();
 
-        inline VkInstance getHandle() { return m_pHandle; }
+        inline VkInstance getHandle() { return handle; }
 
     private:
-        VkInstance m_pHandle;
-        VkDebugUtilsMessengerEXT m_pDebugMessenger;
+        VkInstance handle;
+        VkDebugUtilsMessengerEXT debugMessenger;
 
-        const std::vector<const char*> m_validationLayers;
+        Logger *logger;
+
+        const std::vector<const char*> validationLayers;
 
         bool validationLayerSupported();
     };

@@ -9,81 +9,83 @@
 #include "Logger.h"
 #include "DebugMessenger.h"
 
-namespace Bogus {
-    Instance::Instance(Window* window) :
-            m_pHandle(nullptr), m_pDebugMessenger(nullptr),
-            m_validationLayers({"VK_LAYER_KHRONOS_validation"}) {
-        VkApplicationInfo appInfo{};
-        appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-        appInfo.pApplicationName = "Hello Triangle";
-        appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-        appInfo.pEngineName = "No Engine";
-        appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-        appInfo.apiVersion = VK_API_VERSION_1_0;
+#define TAG "Instance"
 
-        VkInstanceCreateInfo createInfo{};
-        createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-        createInfo.pApplicationInfo = &appInfo;
+using namespace Bogus;
 
-        auto extensions = Window::getRequiredExtensions();
+Instance::Instance() : handle(nullptr), debugMessenger(nullptr),
+validationLayers({"VK_LAYER_KHRONOS_validation"}), logger(nullptr) {
+    logger = Logger::getInstance();
 
-        VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
-        if (ENABLE_VALIDATION_LAYERS && validationLayerSupported()) {
-            extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+    VkApplicationInfo appInfo{};
+    appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+    appInfo.pApplicationName = "Hello Triangle";
+    appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
+    appInfo.pEngineName = "No Engine";
+    appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
+    appInfo.apiVersion = VK_API_VERSION_1_0;
 
-            createInfo.enabledLayerCount = static_cast<uint32_t>(m_validationLayers.size());
-            createInfo.ppEnabledLayerNames = m_validationLayers.data();
+    VkInstanceCreateInfo createInfo{};
+    createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    createInfo.pApplicationInfo = &appInfo;
 
-            DebugMessenger::populateCreateInfo(debugCreateInfo);
-            createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*) &debugCreateInfo;
-        } else {
-            createInfo.enabledLayerCount = 0;
-            createInfo.pNext = nullptr;
-        }
-        createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
-        createInfo.ppEnabledExtensionNames = extensions.data();
+    auto extensions = Window::getRequiredExtensions();
 
-        //LOG_DEBUG("Creating Vk Instance");
-        if (vkCreateInstance(&createInfo, nullptr, &m_pHandle) != VK_SUCCESS) {
-            throw std::runtime_error("failed to create instance!");
-        }
+    VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
+    if (ENABLE_VALIDATION_LAYERS && validationLayerSupported()) {
+        extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 
-        if(ENABLE_VALIDATION_LAYERS && validationLayerSupported()) {
-            //LOG_DEBUG("Creating debug messenger");
-            if (DebugMessenger::Create(m_pHandle, &debugCreateInfo, nullptr, &m_pDebugMessenger) != VK_SUCCESS)
-                throw std::runtime_error("failed to set up debug messenger!");
-        }
+        createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+        createInfo.ppEnabledLayerNames = validationLayers.data();
+
+        DebugMessenger::populateCreateInfo(debugCreateInfo);
+        createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*) &debugCreateInfo;
+    } else {
+        createInfo.enabledLayerCount = 0;
+        createInfo.pNext = nullptr;
+    }
+    createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
+    createInfo.ppEnabledExtensionNames = extensions.data();
+
+    logger->logVerbose(TAG, "Creating VkInstance");
+    if (vkCreateInstance(&createInfo, nullptr, &handle) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create instance!");
     }
 
-    Instance::~Instance() {
-        //LOG_INFO("Destroying debug messenger");
-        DebugMessenger::Destroy(m_pHandle, m_pDebugMessenger, nullptr);
-
-        //LOG_INFO("Destroying instance");
-        vkDestroyInstance(m_pHandle, nullptr);
-    }
-
-    bool Instance::validationLayerSupported() {
-        uint32_t layerCount;
-        vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
-
-        std::vector<VkLayerProperties> availableLayers(layerCount);
-        vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
-
-        for (const char* layerName : m_validationLayers) {
-            bool layerFound = false;
-            for (const auto& layerProperties : availableLayers) {
-                if (strcmp(layerName, layerProperties.layerName) == 0) {
-                    layerFound = true;
-                    break;
-                }
-            }
-            if (!layerFound)
-                return false;
+    if (ENABLE_VALIDATION_LAYERS && validationLayerSupported()) {
+        logger->logVerbose(TAG, "Creating debug messenger");
+        if (DebugMessenger::create(handle, &debugCreateInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
+            throw std::runtime_error("failed to set up debug messenger!");
         }
-        return true;
     }
-
-
 }
 
+Instance::~Instance() {
+    logger->logVerbose(TAG, "Destroying debug messenger");
+    DebugMessenger::destroy(handle, debugMessenger, nullptr);
+
+    logger->logVerbose(TAG, "Destroying VkInstance");
+    vkDestroyInstance(handle, nullptr);
+}
+
+bool Instance::validationLayerSupported() {
+    uint32_t layerCount;
+    vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
+
+    std::vector<VkLayerProperties> availableLayers(layerCount);
+    vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
+
+    for (const char* layerName : validationLayers) {
+        bool layerFound = false;
+        for (const auto& layerProperties : availableLayers) {
+            if (strcmp(layerName, layerProperties.layerName) == 0) {
+                layerFound = true;
+                break;
+            }
+        }
+        if (!layerFound) {
+            return false;
+        }
+    }
+    return true;
+}

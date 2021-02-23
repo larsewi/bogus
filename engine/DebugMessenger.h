@@ -2,8 +2,8 @@
 // Created by larsewi on 31.08.2020.
 //
 
-#ifndef BOGUS_DEBUGMESSENGER_H
-#define BOGUS_DEBUGMESSENGER_H
+#ifndef BOGUS_DEBUG_MESSENGER_H
+#define BOGUS_DEBUG_MESSENGER_H
 
 #include "Instance.h"
 #include "vulkan/vulkan.h"
@@ -15,21 +15,21 @@
 #endif
 
 
-namespace Bogus::DebugMessenger {
+namespace Bogus {
 
-    VkResult Create(
-            VkInstance instance,
-            const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
-            const VkAllocationCallbacks* pAllocator,
-            VkDebugUtilsMessengerEXT* pDebugMessenger);
+    class DebugMessenger {
+    public:
+        static VkResult create(VkInstance instance,
+                               const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
+                               const VkAllocationCallbacks* pAllocator,
+                               VkDebugUtilsMessengerEXT* pDebugMessenger);
 
-    void Destroy(
-            VkInstance instance,
-            VkDebugUtilsMessengerEXT debugMessenger,
-            const VkAllocationCallbacks* pAllocator);
+        static void destroy(VkInstance instance,
+                            VkDebugUtilsMessengerEXT debugMessenger,
+                            const VkAllocationCallbacks* pAllocator);
 
-    void populateCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
-};
+        static void populateCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
+    };
+}
 
-
-#endif //BOGUS_DEBUGMESSENGER_H
+#endif //BOGUS_DEBUG_MESSENGER_H

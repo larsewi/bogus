@@ -9,6 +9,7 @@
 
 #include "Window.h"
 #include "Instance.h"
+#include "Logger.h"
 
 namespace Bogus {
     class Application {
@@ -26,12 +27,12 @@ namespace Bogus {
         virtual void onExit() {};
 
     private:
-        const char *const tag = "Application";
+        Logger *logger;
 
-        Window *m_pWindow;
-        Instance *m_pInstance;
+        Window *window;
+        Instance *instance;
 
-        bool m_bShouldRun;
+        bool shouldRun;
 
         void handleEvents();
         void update();

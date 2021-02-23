@@ -1,19 +1,29 @@
 
-#define WIDTH 720
-#define HEIGHT 480
-#define TITLE "Bogus Game Engine"
-
 #include "SandboxApp.h"
 
+#define TAG "main"
+#define WINDOW_WIDTH 720
+#define WINDOW_HEIGHT 480
+#define WINDOW_TITLE "Bogus Game Engine"
+
+
 int main() {
-    const char *const tag = "main";
     auto logger = Bogus::Logger::getInstance();
     logger->setLogLevel(Bogus::Logger::LOG_LEVEL_DEBUG);
 
-    logger->logDebug(tag, "Starting sandbox");
-    auto app = SandboxApp(WIDTH, HEIGHT, TITLE);
-    app.run();
+    Bogus::Application *app = nullptr;
+    try {
+        app = new SandboxApp(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
+        app->run();
+    } catch (const std::exception& e) {
+        logger->logError(TAG, e.what());
+        delete app;
+        delete logger;
+        return EXIT_FAILURE;
+    }
 
+    delete app;
     delete logger;
-    return 0;
+
+    return EXIT_SUCCESS;
 }

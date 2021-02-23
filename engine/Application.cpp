@@ -5,35 +5,35 @@
 #include <stdexcept>
 
 #include "Application.h"
-#include "Logger.h"
 
-Bogus::Application::Application(int width, int height, const std::string& title) :
-        m_bShouldRun(false), m_pWindow(nullptr), m_pInstance(nullptr) {
-    try {
-        auto logger = Logger::getInstance();
-        logger->logDebug(tag, "creating window");
-        m_pWindow = new Window(width, height, title);
+#define TAG "Application"
 
-        logger->logDebug(tag, "creating instance");
-        m_pInstance = new Instance(m_pWindow);
+using namespace Bogus;
 
-        m_bShouldRun = true;
-    } catch (const std::exception& e) {
-        //logger->logError(tag, e.what());
-    }
+Application::Application(int width, int height, const std::string& title) :
+    shouldRun(false), window(nullptr), instance(nullptr), logger(nullptr) {
+    logger = Logger::getInstance();
+
+    logger->logVerbose(TAG, "Creating window");
+    window = new Window(width, height, title);
+
+    logger->logVerbose(TAG, "Creating instance");
+    instance = new Instance();
+
+    shouldRun = true;
 }
 
-Bogus::Application::~Application() {
-    //LOG_INFO("Deleting instance");
-    delete m_pInstance;
+Application::~Application() {
+    logger->logVerbose(TAG, "Deleting instance");
+    delete instance;
 
-    //LOG_INFO("Deleting window");
-    delete m_pWindow;
+    logger->logVerbose(TAG, "Deleting window");
+    delete window;
 }
 
-void Bogus::Application::run() {
+void Application::run() {
     onInit();
-    while (m_bShouldRun) {
+    while (shouldRun) {
         handleEvents();
         update();
         render();
@@ -41,16 +41,16 @@ void Bogus::Application::run() {
     onExit();
 }
 
-void Bogus::Application::handleEvents() {
+void Application::handleEvents() {
     Window::pollEvents();
     onEvent();
 }
 
-void Bogus::Application::update() {
-    m_bShouldRun = !m_pWindow->shouldClose();
+void Application::update() {
+    shouldRun = !window->shouldClose();
     onUpdate();
 }
 
-void Bogus::Application::render() {
+void Application::render() {
     onDraw();
 }
