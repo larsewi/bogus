@@ -7,30 +7,31 @@
 #include "Application.h"
 #include "Logger.h"
 
-Application::Application(int width, int height, const std::string& title) :
+Bogus::Application::Application(int width, int height, const std::string& title) :
         m_bShouldRun(false), m_pWindow(nullptr), m_pInstance(nullptr) {
     try {
-        LOG_INFO("Creating window");
+        auto logger = Logger::getInstance();
+        logger->logDebug(tag, "creating window");
         m_pWindow = new Window(width, height, title);
 
-        LOG_INFO("Creating instance");
+        logger->logDebug(tag, "creating instance");
         m_pInstance = new Instance(m_pWindow);
 
         m_bShouldRun = true;
     } catch (const std::exception& e) {
-        LOG_ERROR(e.what());
+        //logger->logError(tag, e.what());
     }
 }
 
-Application::~Application() {
-    LOG_INFO("Deleting instance");
+Bogus::Application::~Application() {
+    //LOG_INFO("Deleting instance");
     delete m_pInstance;
 
-    LOG_INFO("Deleting window");
+    //LOG_INFO("Deleting window");
     delete m_pWindow;
 }
 
-void Application::run() {
+void Bogus::Application::run() {
     onInit();
     while (m_bShouldRun) {
         handleEvents();
@@ -40,16 +41,16 @@ void Application::run() {
     onExit();
 }
 
-void Application::handleEvents() {
+void Bogus::Application::handleEvents() {
     Window::pollEvents();
     onEvent();
 }
 
-void Application::update() {
+void Bogus::Application::update() {
     m_bShouldRun = !m_pWindow->shouldClose();
     onUpdate();
 }
 
-void Application::render() {
+void Bogus::Application::render() {
     onDraw();
 }

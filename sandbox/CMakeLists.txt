@@ -1,4 +1,7 @@
 
-add_executable(game main.cpp SandboxApp.cpp SandboxApp.h)
+add_executable(sandbox
+        main.cpp
+        SandboxApp.cpp
+        SandboxApp.h)
 
-target_link_libraries(game LINK_PUBLIC acrylic)
+target_link_libraries(sandbox LINK_PUBLIC bogus)

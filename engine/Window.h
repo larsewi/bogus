@@ -2,8 +2,8 @@
 // Created by larsewi on 19.08.2020.
 //
 
-#ifndef ACRYLIC_WINDOW_H
-#define ACRYLIC_WINDOW_H
+#ifndef BOGUS_WINDOW_H
+#define BOGUS_WINDOW_H
 
 #include <string>
 #include <vector>
@@ -26,4 +26,4 @@ private:
 };
 
 
-#endif //ACRYLIC_WINDOW_H
+#endif //BOGUS_WINDOW_H

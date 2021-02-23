@@ -2,72 +2,46 @@
 // Created by larsewi on 19.08.2020.
 //
 
-#ifndef ACRYLIC_LOGGER_H
-#define ACRYLIC_LOGGER_H
+#ifndef BOGUS_LOGGER_H
+#define BOGUS_LOGGER_H
 
 #include <cstdio>
 #include <cstdarg>
+#include <string>
 
-/**
- * Select desired logger types for debug and release.
- */
-#ifndef NDEBUG // DEBUG
-#define LOGGER_LOG_ERROR 1
-#define LOGGER_LOG_WARNING 1
-#define LOGGER_LOG_INFO 1
-#define LOGGER_LOG_DEBUG 1
-#else // RELEASE
-#define LOGGER_LOG_ERROR 1
-#define LOGGER_LOG_WARNING 0
-#define LOGGER_LOG_INFO 0
-#define LOGGER_LOG_DEBUG 0
-#endif
+namespace Bogus {
 
-#if LOGGER_LOG_ERROR
-#define LOG_ERROR(...) \
-logger::log_f(__FILE__, __func__, __LINE__, "ERROR", LOGGER_ERROR_COLOR, stderr, __VA_ARGS__)
-#else
-#define LOG_ERROR(...)
-#endif
+    class Logger {
+    public:
+        enum LOG_LEVEL {
+            LOG_LEVEL_DEBUG = 0,
+            LOG_LEVEL_VERBOSE = 1,
+            LOG_LEVEL_INFO = 2,
+            LOG_LEVEL_WARNING = 3,
+            LOG_LEVEL_ERROR = 4,
+            LOG_LEVEL_NONE = 5
+        };
 
-#if LOGGER_LOG_WARNING
-#define LOG_WARNING(...) \
-logger::log_f(__FILE__, __func__, __LINE__, "WARNING", LOGGER_WARNING_COLOR, stdout, __VA_ARGS__)
-#else
-#define LOG_WARNING(...)
-#endif
+        ~Logger();
 
-#if LOGGER_LOG_INFO
-#define LOG_INFO(...) \
-logger::log_f(__FILE__, __func__, __LINE__, "INFO", LOGGER_INFO_COLOR, stdout, __VA_ARGS__)
-#else
-#define LOG_INFO(...)
-#endif
+        static Logger *getInstance();
 
-#if LOGGER_LOG_DEBUG
-#define LOG_DEBUG(...) \
-logger::log_f(__FILE__, __func__, __LINE__, "DEBUG", LOGGER_DEBUG_COLOR, stdout, __VA_ARGS__)
-#else
-#define LOG_DEBUG(...)
-#endif
+        void setLogLevel(int level) {
+            logLevel = level;
+        }
 
+        void logDebug(const char *tag, const char *format, ...) const;
+        void logVerbose(const char *tag, const char *format, ...) const;
+        void logInfo(const char *tag, const char *format, ...) const;
+        void logWarning(const char *tag, const char *format, ...) const;
+        void logError(const char *tag, const char *format, ...) const;
 
+    private:
+        static Logger *instance;
+        int logLevel;
 
-/**
- * Logger colors.
- */
-#define LOGGER_CLEAR_COLOR "\x1B[0m"  // Clear color
-#define LOGGER_ERROR_COLOR "\x1B[31m" // Error color
-#define LOGGER_WARNING_COLOR "\x1B[33m" // Warning color
-#define LOGGER_INFO_COLOR "\x1B[35m" // Info color
-#define LOGGER_DEBUG_COLOR "\x1B[36m" // Debug color
-
-namespace logger {
-        void log_f(
-                const char *file, const char *func, int line,
-                const char *type, const char *color, FILE *filePtr,
-                const char *format, ...
-        );
+        Logger();
+    };
 }
 
-#endif //ACRYLIC_LOGGER_H
+#endif //BOGUS_LOGGER_H

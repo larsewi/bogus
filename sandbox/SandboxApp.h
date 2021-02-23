@@ -2,12 +2,12 @@
 // Created by larsewi on 19.08.2020.
 //
 
-#ifndef ACRYLIC_SANDBOXAPP_H
-#define ACRYLIC_SANDBOXAPP_H
+#ifndef BOGUS_SANDBOX_APP_H
+#define BOGUS_SANDBOX_APP_H
 
-#include <Acrylic.h>
+#include <Bogus.h>
 
-class SandboxApp : public Application {
+class SandboxApp : public Bogus::Application {
 public:
     SandboxApp(int width, int height, const std::string& title);
     ~SandboxApp() override = default;
@@ -20,4 +20,4 @@ protected:
     void onExit() override;
 };
 
-#endif //ACRYLIC_SANDBOXAPP_H
+#endif //BOGUS_SANDBOX_APP_H

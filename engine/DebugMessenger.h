@@ -2,8 +2,8 @@
 // Created by larsewi on 31.08.2020.
 //
 
-#ifndef ACRYLIC_DEBUGMESSENGER_H
-#define ACRYLIC_DEBUGMESSENGER_H
+#ifndef BOGUS_DEBUGMESSENGER_H
+#define BOGUS_DEBUGMESSENGER_H
 
 #include "Instance.h"
 #include "vulkan/vulkan.h"
@@ -15,7 +15,7 @@
 #endif
 
 
-namespace DebugMessenger {
+namespace Bogus::DebugMessenger {
 
     VkResult Create(
             VkInstance instance,
@@ -32,4 +32,4 @@ namespace DebugMessenger {
 };
 
 
-#endif //ACRYLIC_DEBUGMESSENGER_H
+#endif //BOGUS_DEBUGMESSENGER_H

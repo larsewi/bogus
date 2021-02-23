@@ -1,10 +1,20 @@
 
-add_library(acrylic Application.cpp Application.h Window.cpp Window.h Logger.h Instance.cpp Instance.h DebugMessenger.cpp DebugMessenger.h Logger.cpp)
+add_library(bogus
+        Application.h
+        Application.cpp
+        Window.h
+        Window.cpp
+        Logger.h
+        Logger.cpp
+        Instance.h
+        Instance.cpp
+        DebugMessenger.h
+        DebugMessenger.cpp)
 
 find_package(Vulkan REQUIRED)
-target_link_libraries(acrylic Vulkan::Vulkan)
+target_link_libraries(bogus Vulkan::Vulkan)
 
 find_package(glfw3 REQUIRED)
-target_link_libraries(acrylic glfw)
+target_link_libraries(bogus glfw)
 
-target_include_directories(acrylic PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(bogus PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

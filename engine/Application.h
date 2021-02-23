@@ -2,37 +2,42 @@
 // Created by larsewi on 18.08.2020.
 //
 
-#ifndef ACRYLIC_APPLICATION_H
-#define ACRYLIC_APPLICATION_H
+#ifndef BOGUS_APPLICATION_H
+#define BOGUS_APPLICATION_H
 
 #include <string>
 
 #include "Window.h"
 #include "Instance.h"
 
-class Application {
-public:
-    Application(int width, int height, const std::string& title);
-    virtual ~Application();
+namespace Bogus {
+    class Application {
+    public:
+        Application(int width, int height, const std::string& title);
+        virtual ~Application();
 
-    void run();
+        void run();
 
-protected:
-    virtual void onInit() {};
-    virtual void onEvent() {};
-    virtual void onUpdate() {};
-    virtual void onDraw() {};
-    virtual void onExit() {};
+    protected:
+        virtual void onInit() {};
+        virtual void onEvent() {};
+        virtual void onUpdate() {};
+        virtual void onDraw() {};
+        virtual void onExit() {};
 
-private:
-    void handleEvents();
-    void update();
-    void render();
+    private:
+        const char *const tag = "Application";
 
-    Window* m_pWindow;
-    Instance* m_pInstance;
+        Window *m_pWindow;
+        Instance *m_pInstance;
 
-    bool m_bShouldRun;
-};
+        bool m_bShouldRun;
 
-#endif //ACRYLIC_APPLICATION_H
+        void handleEvents();
+        void update();
+        void render();
+    };
+}
+
+
+#endif //BOGUS_APPLICATION_H
