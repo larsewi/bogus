@@ -23,8 +23,10 @@ namespace Bogus {
         static std::vector<const char*> getRequiredExtensions();
 
     private:
-        static int count;
         Logger *logger;
+        const std::string tag = "Window";
+
+        static int count;
         GLFWwindow* glfwWindow;
     };
 }

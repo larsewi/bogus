@@ -7,8 +7,6 @@
 
 #include "Window.h"
 
-#define TAG "Window"
-
 using namespace Bogus;
 
 int Window::count = 0;
@@ -17,35 +15,34 @@ Window::Window(int width, int height, const std::string& title) : glfwWindow(nul
     logger = Logger::getInstance();
 
     if (count++ == 0) {
-        logger->logVerbose(TAG, "Initializing GLFW");
+        logger->logDebug(tag, "Initializing GLFW");
         glfwInit();
     }
+    logger->logDebug(tag, "Number of open windows %d", count);
 
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-    logger->logVerbose(TAG, "Creating GLFW window");
+    logger->logDebug(tag, "Creating GLFW window");
     glfwWindow = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
     if (!glfwWindow)
         throw std::runtime_error("GLFW window creation failed");
 }
 
 Window::~Window() {
-    logger->logVerbose(TAG, "Destroying GLFW window");
+    logger->logDebug(tag, "Destroying GLFW window");
     glfwDestroyWindow(glfwWindow);
-
     if (count-- == 1) {
-        logger->logVerbose(TAG, "Terminating GLFW");
+        logger->logDebug(tag, "Terminating GLFW");
         glfwTerminate();
     }
+    logger->logDebug(tag, "Number of open windows %d", count);
 }
 
 std::vector<const char*> Window::getRequiredExtensions() {
     uint32_t glfwExtensionCount = 0;
     const char** glfwExtensions;
     glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-
     std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
-
     return extensions;
 }

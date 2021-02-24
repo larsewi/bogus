@@ -6,28 +6,26 @@
 
 #include "Application.h"
 
-#define TAG "Application"
-
 using namespace Bogus;
 
 Application::Application(int width, int height, const std::string& title) :
     shouldRun(false), window(nullptr), instance(nullptr), logger(nullptr) {
     logger = Logger::getInstance();
 
-    logger->logVerbose(TAG, "Creating window");
+    logger->logDebug(tag, "Creating window");
     window = new Window(width, height, title);
 
-    logger->logVerbose(TAG, "Creating instance");
+    logger->logDebug(tag, "Creating instance");
     instance = new Instance();
 
     shouldRun = true;
 }
 
 Application::~Application() {
-    logger->logVerbose(TAG, "Deleting instance");
+    logger->logDebug(tag, "Deleting instance");
     delete instance;
 
-    logger->logVerbose(TAG, "Deleting window");
+    logger->logDebug(tag, "Deleting window");
     delete window;
 }
 

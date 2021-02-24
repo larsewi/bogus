@@ -22,55 +22,44 @@ namespace Bogus {
 
     Logger::~Logger() = default;
 
-    void Logger::logDebug(const char *tag, const char *format, ...) const {
+    void Logger::logDebug(const std::string& tag, const char *format, ...) const {
         if (logLevel <= LOG_LEVEL_DEBUG) {
             va_list ap;
             va_start(ap, format);
-            fprintf(stdout, "[%sDEBUG%s][%s]: ", ANSI_COLOR_GREEN, ANSI_COLOR_RESET, tag);
+            fprintf(stdout, "[%sDEBUG%s][%s]: ", ANSI_COLOR_MAGENTA, ANSI_COLOR_RESET, tag.c_str());
             vfprintf(stdout, format, ap);
             fprintf(stdout, "\n");
             va_end(ap);
         }
     }
 
-    void Logger::logVerbose(const char *tag, const char *format, ...) const {
-        if (logLevel <= LOG_LEVEL_VERBOSE) {
-            va_list ap;
-            va_start(ap, format);
-            fprintf(stdout, "[%sVERBOSE%s][%s]: ", ANSI_COLOR_MAGENTA, ANSI_COLOR_RESET, tag);
-            vfprintf(stdout, format, ap);
-            fprintf(stdout, "\n");
-            va_end(ap);
-        }
-    }
-
-    void Logger::logInfo(const char *tag, const char *format, ...) const {
+    void Logger::logInfo(const std::string& tag , const char *format, ...) const {
         if (logLevel <= LOG_LEVEL_INFO) {
             va_list ap;
             va_start(ap, format);
-            fprintf(stdout, "[%sINFO%s][%s]: ", ANSI_COLOR_CYAN, ANSI_COLOR_RESET, tag);
+            fprintf(stdout, "[%sINFO%s][%s]: ", ANSI_COLOR_CYAN, ANSI_COLOR_RESET, tag.c_str());
             vfprintf(stdout, format, ap);
             fprintf(stdout, "\n");
             va_end(ap);
         }
     }
 
-    void Logger::logWarning(const char *tag, const char *format, ...) const {
+    void Logger::logWarning(const std::string& tag, const char *format, ...) const {
         if (logLevel <= LOG_LEVEL_WARNING) {
             va_list ap;
             va_start(ap, format);
-            fprintf(stdout, "[%sWARNING%s][%s]: ", ANSI_COLOR_YELLOW, ANSI_COLOR_RESET, tag);
+            fprintf(stdout, "[%sWARNING%s][%s]: ", ANSI_COLOR_YELLOW, ANSI_COLOR_RESET, tag.c_str());
             vfprintf(stdout, format, ap);
             fprintf(stdout, "\n");
             va_end(ap);
         }
     }
 
-    void Logger::logError(const char *tag, const char *format, ...) const {
+    void Logger::logError(const std::string& tag, const char *format, ...) const {
         if (logLevel <= LOG_LEVEL_ERROR) {
             va_list ap;
             va_start(ap, format);
-            fprintf(stderr, "[%sERROR%s][%s]: ", ANSI_COLOR_RED, ANSI_COLOR_RESET, tag);
+            fprintf(stderr, "[%sERROR%s][%s]: ", ANSI_COLOR_RED, ANSI_COLOR_RESET, tag.c_str());
             vfprintf(stderr, format, ap);
             fprintf(stderr, "\n");
             va_end(ap);

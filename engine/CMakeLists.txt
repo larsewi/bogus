@@ -8,8 +8,7 @@ add_library(bogus
         Logger.cpp
         Instance.h
         Instance.cpp
-        DebugMessenger.h
-        DebugMessenger.cpp)
+        )
 
 find_package(Vulkan REQUIRED)
 target_link_libraries(bogus Vulkan::Vulkan)

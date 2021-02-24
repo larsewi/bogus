@@ -28,6 +28,7 @@ namespace Bogus {
 
     private:
         Logger *logger;
+        const std::string tag = "Application";
 
         Window *window;
         Instance *instance;

@@ -9,24 +9,26 @@
 #include <vulkan/vulkan.h>
 
 #include "Window.h"
-#include "DebugMessenger.h"
 #include "Logger.h"
 
 namespace Bogus {
     class Instance {
     public:
-        explicit Instance();
+        Instance();
+
         ~Instance();
 
-        inline VkInstance getHandle() { return handle; }
-
     private:
-        VkInstance handle;
-        VkDebugUtilsMessengerEXT debugMessenger;
-
         Logger *logger;
+        const std::string tag = "Instance";
 
-        const std::vector<const char*> validationLayers;
+        VkInstance instance;
+        VkDebugUtilsMessengerEXT debugMessenger;
+        VkPhysicalDevice physicalDevice;
+
+        const std::vector<const char *> validationLayers{
+                "VK_LAYER_KHRONOS_validation"
+        };
 
         bool validationLayerSupported();
     };
