@@ -18,7 +18,6 @@ Window::Window(int width, int height, const std::string& title) : glfwWindow(nul
         logger->logDebug(tag, "Initializing GLFW");
         glfwInit();
     }
-    logger->logDebug(tag, "Number of open windows %d", count);
 
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
@@ -36,7 +35,6 @@ Window::~Window() {
         logger->logDebug(tag, "Terminating GLFW");
         glfwTerminate();
     }
-    logger->logDebug(tag, "Number of open windows %d", count);
 }
 
 std::vector<const char*> Window::getRequiredExtensions() {

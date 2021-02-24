@@ -26,7 +26,7 @@ static VkBool32 debugMessengerCallback(VkDebugUtilsMessageSeverityFlagBitsEXT me
                                        VkDebugUtilsMessageTypeFlagsEXT messageType,
                                        const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData, void *pUserData);
 
-Instance::Instance() : instance(nullptr), debugMessenger(nullptr), logger(nullptr), physicalDevice(nullptr) {
+Instance::Instance() : instance(nullptr), debugUtilsMessenger(nullptr), logger(nullptr), physicalDevice(nullptr) {
     logger = Logger::getInstance();
 
     VkApplicationInfo appInfo {};
@@ -65,24 +65,26 @@ Instance::Instance() : instance(nullptr), debugMessenger(nullptr), logger(nullpt
     instanceCreateInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
     instanceCreateInfo.ppEnabledExtensionNames = extensions.data();
 
-    logger->logDebug(tag, "Creating VkInstance");
+    logger->logDebug(tag, "Creating vulkan instance");
     if (vkCreateInstance(&instanceCreateInfo, nullptr, &instance) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create instance!");
+        throw std::runtime_error("failed to create vulkan instance!");
     }
 
     if (ENABLE_VALIDATION_LAYERS && validationLayerSupported()) {
-        logger->logDebug(tag, "Creating debug messenger");
-        if (createDebugMessenger(instance, &debugCreateInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
-            throw std::runtime_error("failed to set up debug messenger!");
+        logger->logDebug(tag, "Creating vulkan debug messenger");
+        if (createDebugMessenger(instance, &debugCreateInfo, nullptr, &debugUtilsMessenger) != VK_SUCCESS) {
+            throw std::runtime_error("failed create vulkan debug messenger!");
         }
     }
 }
 
 Instance::~Instance() {
-    logger->logDebug(tag, "Destroying debug messenger");
-    destroyDebugMessenger(instance, debugMessenger, nullptr);
+    if (ENABLE_VALIDATION_LAYERS && validationLayerSupported()) {
+        logger->logDebug(tag, "Destroying vulkan debug messenger");
+        destroyDebugMessenger(instance, debugUtilsMessenger, nullptr);
+    }
 
-    logger->logDebug(tag, "Destroying VkInstance");
+    logger->logDebug(tag, "Destroying vulkan instance");
     vkDestroyInstance(instance, nullptr);
 }
 

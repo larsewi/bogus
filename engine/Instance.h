@@ -23,7 +23,7 @@ namespace Bogus {
         const std::string tag = "Instance";
 
         VkInstance instance;
-        VkDebugUtilsMessengerEXT debugMessenger;
+        VkDebugUtilsMessengerEXT debugUtilsMessenger;
         VkPhysicalDevice physicalDevice;
 
         const std::vector<const char *> validationLayers{

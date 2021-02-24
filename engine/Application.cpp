@@ -12,20 +12,14 @@ Application::Application(int width, int height, const std::string& title) :
     shouldRun(false), window(nullptr), instance(nullptr), logger(nullptr) {
     logger = Logger::getInstance();
 
-    logger->logDebug(tag, "Creating window");
     window = new Window(width, height, title);
-
-    logger->logDebug(tag, "Creating instance");
     instance = new Instance();
 
     shouldRun = true;
 }
 
 Application::~Application() {
-    logger->logDebug(tag, "Deleting instance");
     delete instance;
-
-    logger->logDebug(tag, "Deleting window");
     delete window;
 }
 
