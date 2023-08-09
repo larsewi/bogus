@@ -1,13 +1,13 @@
 
 add_library(bogus
-        Application.h
-        Application.cpp
-        Window.h
-        Window.cpp
-        Logger.h
-        Logger.cpp
-        Instance.h
-        Instance.cpp
+        application.hpp
+        application.cpp
+        window.hpp
+        window.cpp
+        logger.hpp
+        logger.cpp
+        instance.hpp
+        instance.cpp
         )
 
 find_package(Vulkan REQUIRED)

@@ -2,8 +2,8 @@
 // Created by larsewi on 19.08.2020.
 //
 
-#ifndef BOGUS_LOGGER_H
-#define BOGUS_LOGGER_H
+#ifndef BOGUS_LOGGER_HPP
+#define BOGUS_LOGGER_HPP
 
 #include <cstdio>
 #include <cstdarg>
@@ -42,4 +42,4 @@ namespace Bogus {
     };
 }
 
-#endif //BOGUS_LOGGER_H
+#endif //BOGUS_LOGGER_HPP

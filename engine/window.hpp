@@ -2,14 +2,14 @@
 // Created by larsewi on 19.08.2020.
 //
 
-#ifndef BOGUS_WINDOW_H
-#define BOGUS_WINDOW_H
+#ifndef BOGUS_WINDOW_HPP
+#define BOGUS_WINDOW_HPP
 
 #include <string>
 #include <vector>
 #include <GLFW/glfw3.h>
 
-#include "Logger.h"
+#include "logger.hpp"
 
 namespace Bogus {
     class Window {
@@ -31,4 +31,4 @@ namespace Bogus {
     };
 }
 
-#endif //BOGUS_WINDOW_H
+#endif // BOGUS_WINDOW_HPP

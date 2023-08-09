@@ -4,7 +4,7 @@
 
 #include <stdexcept>
 
-#include "Application.h"
+#include "application.hpp"
 
 using namespace Bogus;
 

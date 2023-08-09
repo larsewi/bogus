@@ -2,14 +2,14 @@
 // Created by larsewi on 18.08.2020.
 //
 
-#ifndef BOGUS_APPLICATION_H
-#define BOGUS_APPLICATION_H
+#ifndef BOGUS_APPLICATION_HPP
+#define BOGUS_APPLICATION_HPP
 
 #include <string>
 
-#include "Window.h"
-#include "Instance.h"
-#include "Logger.h"
+#include "window.hpp"
+#include "instance.hpp"
+#include "logger.hpp"
 
 namespace Bogus {
     class Application {
@@ -41,5 +41,4 @@ namespace Bogus {
     };
 }
 
-
-#endif //BOGUS_APPLICATION_H
+#endif // BOGUS_APPLICATION_HPP

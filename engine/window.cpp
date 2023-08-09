@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <vulkan/vulkan.h>
 
-#include "Window.h"
+#include "window.hpp"
 
 using namespace Bogus;
 

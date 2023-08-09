@@ -1,7 +1,7 @@
 
 add_executable(sandbox
         main.cpp
-        SandboxApp.cpp
-        SandboxApp.h)
+        sandbox_app.cpp
+        sandbox_app.hpp)
 
 target_link_libraries(sandbox LINK_PUBLIC bogus)

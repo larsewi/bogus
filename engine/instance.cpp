@@ -5,7 +5,7 @@
 #include <cstring>
 #include <stdexcept>
 
-#include "Instance.h"
+#include "instance.hpp"
 
 #ifdef NDEBUG
 #define ENABLE_VALIDATION_LAYERS false

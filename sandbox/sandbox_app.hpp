@@ -2,10 +2,10 @@
 // Created by larsewi on 19.08.2020.
 //
 
-#ifndef BOGUS_SANDBOX_APP_H
-#define BOGUS_SANDBOX_APP_H
+#ifndef BOGUS_SANDBOX_APP_HPP
+#define BOGUS_SANDBOX_APP_HPP
 
-#include <Bogus.h>
+#include <bogus.hpp>
 
 class SandboxApp : public Bogus::Application {
 public:
@@ -20,4 +20,4 @@ protected:
     void onExit() override;
 };
 
-#endif //BOGUS_SANDBOX_APP_H
+#endif // BOGUS_SANDBOX_APP_HPP

@@ -2,14 +2,14 @@
 // Created by larsewi on 20.08.2020.
 //
 
-#ifndef BOGUS_INSTANCE_H
-#define BOGUS_INSTANCE_H
+#ifndef BOGUS_INSTANCE_HPP
+#define BOGUS_INSTANCE_HPP
 
 #include <vector>
 #include <vulkan/vulkan.h>
 
-#include "Window.h"
-#include "Logger.h"
+#include "window.hpp"
+#include "logger.hpp"
 
 namespace Bogus {
     class Instance {
@@ -34,4 +34,4 @@ namespace Bogus {
     };
 }
 
-#endif //BOGUS_INSTANCE_H
+#endif // BOGUS_INSTANCE_HPP

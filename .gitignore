@@ -37,7 +37,6 @@ CMakeCache.txt
 CMakeFiles
 CMakeScripts
 Testing
-build/**/Makefile
 cmake_install.cmake
 cmake_uninstall.cmake
 install_manifest.txt
@@ -46,4 +45,4 @@ CTestTestfile.cmake
 _deps
 
 # Project specific
-sandbox
+build/*

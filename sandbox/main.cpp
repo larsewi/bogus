@@ -1,5 +1,5 @@
 
-#include "SandboxApp.h"
+#include "sandbox_app.hpp"
 
 #define TAG "main"
 #define WINDOW_WIDTH 720
