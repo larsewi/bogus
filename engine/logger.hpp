@@ -5,41 +5,39 @@
 #ifndef BOGUS_LOGGER_HPP
 #define BOGUS_LOGGER_HPP
 
-#include <cstdio>
 #include <cstdarg>
+#include <cstdio>
 #include <string>
 
 namespace Bogus {
 
-    class Logger {
-    public:
-        enum LOG_LEVEL {
-            LOG_LEVEL_DEBUG = 0,
-            LOG_LEVEL_INFO = 1,
-            LOG_LEVEL_WARNING = 2,
-            LOG_LEVEL_ERROR = 3,
-            LOG_LEVEL_NONE = 4
-        };
+class Logger {
+public:
+  enum LOG_LEVEL {
+    LOG_LEVEL_DEBUG = 0,
+    LOG_LEVEL_INFO = 1,
+    LOG_LEVEL_WARNING = 2,
+    LOG_LEVEL_ERROR = 3,
+    LOG_LEVEL_NONE = 4
+  };
 
-        ~Logger();
+  ~Logger();
 
-        static Logger *getInstance();
+  static Logger *getInstance();
 
-        void setLogLevel(int level) {
-            logLevel = level;
-        }
+  void setLogLevel(int level) { logLevel = level; }
 
-        void logDebug(const std::string& tag, const char *format, ...) const;
-        void logInfo(const std::string& tag, const char *format, ...) const;
-        void logWarning(const std::string& tag, const char *format, ...) const;
-        void logError(const std::string& tag, const char *format, ...) const;
+  void logDebug(const std::string &tag, const char *format, ...) const;
+  void logInfo(const std::string &tag, const char *format, ...) const;
+  void logWarning(const std::string &tag, const char *format, ...) const;
+  void logError(const std::string &tag, const char *format, ...) const;
 
-    private:
-        static Logger *instance;
-        int logLevel;
+private:
+  static Logger *instance;
+  int logLevel;
 
-        Logger();
-    };
-}
+  Logger();
+};
+} // namespace Bogus
 
-#endif //BOGUS_LOGGER_HPP
+#endif // BOGUS_LOGGER_HPP

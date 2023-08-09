@@ -9,24 +9,23 @@
 #define WINDOW_HEIGHT 480
 #define WINDOW_TITLE "Bogus Game Engine"
 
-
 int main() {
-    auto logger = Bogus::Logger::getInstance();
-    logger->setLogLevel(Bogus::Logger::LOG_LEVEL_DEBUG);
+  auto logger = Bogus::Logger::getInstance();
+  logger->setLogLevel(Bogus::Logger::LOG_LEVEL_DEBUG);
 
-    Bogus::Application *app = nullptr;
-    try {
-        app = new SandboxApp(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
-        app->run();
-    } catch (const std::exception& e) {
-        logger->logError(TAG, e.what());
-        delete app;
-        delete logger;
-        return EXIT_FAILURE;
-    }
-
+  Bogus::Application *app = nullptr;
+  try {
+    app = new SandboxApp(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
+    app->run();
+  } catch (const std::exception &e) {
+    logger->logError(TAG, e.what());
     delete app;
     delete logger;
+    return EXIT_FAILURE;
+  }
 
-    return EXIT_SUCCESS;
+  delete app;
+  delete logger;
+
+  return EXIT_SUCCESS;
 }

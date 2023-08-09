@@ -5,9 +5,7 @@
 #ifndef BOGUS_BOGUS_HPP
 #define BOGUS_BOGUS_HPP
 
-#include "logger.hpp"
 #include "application.hpp"
-
-
+#include "logger.hpp"
 
 #endif // BOGUS_BOGUS_HPP

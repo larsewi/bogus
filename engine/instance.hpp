@@ -8,30 +8,29 @@
 #include <vector>
 #include <vulkan/vulkan.h>
 
-#include "window.hpp"
 #include "logger.hpp"
+#include "window.hpp"
 
 namespace Bogus {
-    class Instance {
-    public:
-        Instance();
+class Instance {
+public:
+  Instance();
 
-        ~Instance();
+  ~Instance();
 
-    private:
-        Logger *logger;
-        const std::string tag = "Instance";
+private:
+  Logger *logger;
+  const std::string tag = "Instance";
 
-        VkInstance instance;
-        VkDebugUtilsMessengerEXT debugUtilsMessenger;
-        VkPhysicalDevice physicalDevice;
+  VkInstance instance;
+  VkDebugUtilsMessengerEXT debugUtilsMessenger;
+  VkPhysicalDevice physicalDevice;
 
-        const std::vector<const char *> validationLayers{
-                "VK_LAYER_KHRONOS_validation"
-        };
+  const std::vector<const char *> validationLayers{
+      "VK_LAYER_KHRONOS_validation"};
 
-        bool validationLayerSupported();
-    };
-}
+  bool validationLayerSupported();
+};
+} // namespace Bogus
 
 #endif // BOGUS_INSTANCE_HPP

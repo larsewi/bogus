@@ -7,38 +7,38 @@
 
 #include <string>
 
-#include "window.hpp"
 #include "instance.hpp"
 #include "logger.hpp"
+#include "window.hpp"
 
 namespace Bogus {
-    class Application {
-    public:
-        Application(int width, int height, const std::string& title);
-        virtual ~Application();
+class Application {
+public:
+  Application(int width, int height, const std::string &title);
+  virtual ~Application();
 
-        void run();
+  void run();
 
-    protected:
-        virtual void onInit() {};
-        virtual void onEvent() {};
-        virtual void onUpdate() {};
-        virtual void onDraw() {};
-        virtual void onExit() {};
+protected:
+  virtual void onInit(){};
+  virtual void onEvent(){};
+  virtual void onUpdate(){};
+  virtual void onDraw(){};
+  virtual void onExit(){};
 
-    private:
-        Logger *logger;
-        const std::string tag = "Application";
+private:
+  Logger *logger;
+  const std::string tag = "Application";
 
-        Window *window;
-        Instance *instance;
+  Window *window;
+  Instance *instance;
 
-        bool shouldRun;
+  bool shouldRun;
 
-        void handleEvents();
-        void update();
-        void render();
-    };
-}
+  void handleEvents();
+  void update();
+  void render();
+};
+} // namespace Bogus
 
 #endif // BOGUS_APPLICATION_HPP
