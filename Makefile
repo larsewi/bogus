@@ -1,18 +1,18 @@
-.PHONY: all configure build run clean dependencies
+.PHONY: all configure compile run clean dependencies
 
-all: configure build run
+all: compile
 
 configure:
 	cmake . -DCMAKE_BUILD_TYPE=Debug -B build/
 
-build:
+compile:
 	make -C build/
 
 run:
 	./build/sandbox/sandbox
 
 clean:
-	git clean -fxd
+	rm -rf build/
 
 dependencies:
 	wget -qO - http://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
