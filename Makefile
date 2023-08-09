@@ -1,6 +1,6 @@
 .PHONY: all configure compile run clean dependencies
 
-all: compile
+all: compile run
 
 configure:
 	cmake . -DCMAKE_BUILD_TYPE=Debug -B build/
