@@ -9,15 +9,12 @@
 
 class SandboxApp : public Bogus::Application {
 public:
-  SandboxApp(int width, int height, const std::string &title);
-  ~SandboxApp() override = default;
-
 protected:
-  void onInit() override;
-  void onEvent() override;
-  void onUpdate() override;
-  void onDraw() override;
-  void onExit() override;
+  bool OnInit() override;
+  bool OnEvent() override;
+  bool OnUpdate() override;
+  bool OnDraw() override;
+  bool OnExit() override;
 };
 
 #endif // BOGUS_SANDBOX_APP_HPP

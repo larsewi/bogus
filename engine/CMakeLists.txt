@@ -2,12 +2,6 @@
 add_library(bogus
         application.hpp
         application.cpp
-        window.hpp
-        window.cpp
-        logger.hpp
-        logger.cpp
-        instance.hpp
-        instance.cpp
         )
 
 find_package(Vulkan REQUIRED)

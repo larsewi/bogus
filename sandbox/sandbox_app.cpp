@@ -4,15 +4,12 @@
 
 #include "sandbox_app.hpp"
 
-SandboxApp::SandboxApp(int width, int height, const std::string &title)
-    : Application(width, height, title) {}
+bool SandboxApp::OnInit() { return true; }
 
-void SandboxApp::onInit() {}
+bool SandboxApp::OnEvent() { return true; }
 
-void SandboxApp::onEvent() {}
+bool SandboxApp::OnUpdate() { return true; }
 
-void SandboxApp::onUpdate() {}
+bool SandboxApp::OnDraw() { return true; }
 
-void SandboxApp::onDraw() {}
-
-void SandboxApp::onExit() {}
+bool SandboxApp::OnExit() { return true; }
