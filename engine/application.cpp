@@ -6,7 +6,7 @@
 
 #include "application.hpp"
 
-using namespace Bogus;
+using namespace bogus;
 
 Application::Application(int width, int height, const std::string &title)
     : m_should_run(false), m_goodbit(false) {

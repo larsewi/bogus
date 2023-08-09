@@ -8,7 +8,7 @@
 #include <iostream>
 #include <string>
 
-namespace Bogus {
+namespace bogus {
 
 class Application {
 public:

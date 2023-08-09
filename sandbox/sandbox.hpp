@@ -7,7 +7,7 @@
 
 #include <bogus.hpp>
 
-class Sandbox : public Bogus::Application {
+class Sandbox : public bogus::Application {
 public:
   using Application::Application;
 
