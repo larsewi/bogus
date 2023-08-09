@@ -9,6 +9,8 @@
 
 class Sandbox : public Bogus::Application {
 public:
+  using Application::Application;
+
 protected:
   bool OnInit() override;
   bool OnEvent() override;

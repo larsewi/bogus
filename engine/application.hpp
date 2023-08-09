@@ -15,7 +15,7 @@ public:
   Application(int width, int height, const std::string &title);
   virtual ~Application();
 
-  bool run();
+  bool Run();
 
   operator bool() { return m_goodbit; }
 
@@ -27,7 +27,7 @@ protected:
   virtual bool OnExit() { return true; };
 
 private:
-  bool m_shouldRun;
+  bool m_should_run;
   bool m_goodbit;
 
   bool Init();

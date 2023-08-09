@@ -9,17 +9,19 @@
 using namespace Bogus;
 
 Application::Application(int width, int height, const std::string &title)
-    : m_shouldRun(true), m_goodbit(false) {
+    : m_should_run(false), m_goodbit(false) {
   m_goodbit = true;
 }
 
 Application::~Application() {}
 
-bool Application::run() {
+bool Application::Run() {
   if (!Init()) {
+    std::cerr << "Error occured while initializing" << std::endl;
+    return false;
   }
 
-  while (m_shouldRun) {
+  while (m_should_run) {
     if (!Events()) {
       std::cerr << "Error occured while handling events" << std::endl;
       return false;
@@ -45,26 +47,36 @@ bool Application::run() {
 }
 
 bool Application::Init() {
-  OnInit();
+  if (!OnInit()) {
+    return false;
+  }
   return true;
 }
 
 bool Application::Events() {
-  OnEvent();
+  if (!OnEvent()) {
+    return false;
+  }
   return true;
 }
 
 bool Application::Update() {
-  OnUpdate();
+  if (!OnUpdate()) {
+    return false;
+  }
   return true;
 }
 
 bool Application::Render() {
-  OnDraw();
+  if (!OnDraw()) {
+    return false;
+  }
   return true;
 }
 
 bool Application::Exit() {
-  OnExit();
+  if (!OnExit()) {
+    return false;
+  }
   return true;
 }

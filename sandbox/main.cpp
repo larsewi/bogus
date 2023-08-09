@@ -8,4 +8,17 @@
 #define WINDOW_HEIGHT 480
 #define WINDOW_TITLE "Bogus Game Engine"
 
-int main() { return EXIT_SUCCESS; }
+int main() {
+  auto app = Sandbox(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
+  if (!app) {
+    std::cerr << "Failed to create application" << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  if (!app.Run()) {
+    std::cerr << "Failed to run application" << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  return EXIT_SUCCESS;
+}
