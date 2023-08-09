@@ -2,12 +2,12 @@
 // Created by larsewi on 19.08.2020.
 //
 
-#ifndef BOGUS_SANDBOX_APP_HPP
-#define BOGUS_SANDBOX_APP_HPP
+#ifndef BOGUS_SANDBOX_HPP
+#define BOGUS_SANDBOX_HPP
 
 #include <bogus.hpp>
 
-class SandboxApp : public Bogus::Application {
+class Sandbox : public Bogus::Application {
 public:
 protected:
   bool OnInit() override;
@@ -17,4 +17,4 @@ protected:
   bool OnExit() override;
 };
 
-#endif // BOGUS_SANDBOX_APP_HPP
+#endif // BOGUS_SANDBOX_HPP
