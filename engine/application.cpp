@@ -4,7 +4,7 @@
 
 #define GLFW_INCLUDE_VULKAN
 
-#define ENGINE_TITLE "bogus"
+#define ENGINE_NAME "bogus"
 #define ENGINE_MAJOR 1
 #define ENGINE_MINOR 0
 #define ENGINE_PATCH 0
@@ -70,9 +70,21 @@ static GLFWwindow *CreateWindow(const std::string &title, int width,
 static vk::Instance *CreateInstance(const std::string &name, int major,
                                     int minor, int patch) {
   vk::ApplicationInfo app_info(
-      name.c_str(), VK_MAKE_VERSION(major, minor, patch), ENGINE_TITLE,
+      name.c_str(), VK_MAKE_VERSION(major, minor, patch), ENGINE_NAME,
       VK_MAKE_VERSION(ENGINE_MAJOR, ENGINE_MINOR, ENGINE_PATCH),
       VK_API_VERSION_1_1);
+
+  uint32_t glfw_extension_count = 0;
+  const char **glfw_extension_names =
+      glfwGetRequiredInstanceExtensions(&glfw_extension_count);
+  if (glfw_extension_names == nullptr) {
+    std::cerr << "Failed to get required GLFW instance extensions" << std::endl;
+    return nullptr;
+  }
+
+  vk::InstanceCreateInfo create_info(vk::InstanceCreateFlags(0), &app_info, 0,
+                                     nullptr, glfw_extension_count,
+                                     glfw_extension_names);
 
   return nullptr;
 }
