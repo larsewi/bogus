@@ -5,19 +5,21 @@
 #ifndef BOGUS_APPLICATION_HPP
 #define BOGUS_APPLICATION_HPP
 
+#define GLFW_INCLUDE_VULKAN
+
+#include <GLFW/glfw3.h>
+
 #include <iostream>
+#include <memory>
 #include <string>
 
 namespace bogus {
 
 class Application {
 public:
-  Application(int width, int height, const std::string &title);
+  Application(const int width, const int height, const std::string &title);
   virtual ~Application();
-
   bool Run();
-
-  operator bool() { return m_goodbit; }
 
 protected:
   virtual bool OnInit() { return true; };
@@ -27,16 +29,21 @@ protected:
   virtual bool OnExit() { return true; };
 
 private:
+  const int m_width;
+  const int m_height;
+  const std::string m_title;
   bool m_should_run;
-  bool m_goodbit;
+  GLFWwindow *m_window;
 
   bool Init();
   bool Events();
   bool Update();
   bool Render();
   bool Exit();
+
+  bool InitWindow();
 };
 
-} // namespace Bogus
+} // namespace bogus
 
 #endif // BOGUS_APPLICATION_HPP
