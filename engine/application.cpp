@@ -3,6 +3,7 @@
 //
 
 #define GLFW_INCLUDE_VULKAN
+#define VULKAN_HPP_NO_EXCEPTIONS
 
 #define ENGINE_NAME "bogus"
 #define ENGINE_MAJOR 1
@@ -64,11 +65,16 @@ static GLFWwindow *CreateWindow(const std::string &title, int width,
   }
   glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API); // We are not using OpenGL
   glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // Resizing windows not supported
-  return glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+  GLFWwindow *window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+  if (window == nullptr) {
+    std::cerr << "Failed to create GLFW window" << std::endl;
+    return nullptr;
+  }
+  return window;
 }
 
-static vk::Instance *CreateInstance(const std::string &name, int major,
-                                    int minor, int patch) {
+static bool CreateInstance(vk::Instance *instance, const std::string &name, int major,
+                                   int minor, int patch) {
   vk::ApplicationInfo app_info(
       name.c_str(), VK_MAKE_VERSION(major, minor, patch), ENGINE_NAME,
       VK_MAKE_VERSION(ENGINE_MAJOR, ENGINE_MINOR, ENGINE_PATCH),
@@ -79,20 +85,38 @@ static vk::Instance *CreateInstance(const std::string &name, int major,
       glfwGetRequiredInstanceExtensions(&glfw_extension_count);
   if (glfw_extension_names == nullptr) {
     std::cerr << "Failed to get required GLFW instance extensions" << std::endl;
-    return nullptr;
+    return false;
   }
 
-  vk::InstanceCreateInfo create_info(vk::InstanceCreateFlags(0), &app_info, 0,
-                                     nullptr, glfw_extension_count,
-                                     glfw_extension_names);
+  std::vector<const char *> required_extensions;
+  for (uint32_t i = 0; i < glfw_extension_count; i++) {
+    required_extensions.emplace_back(glfw_extension_names[i]);
+  }
+  required_extensions.emplace_back(
+      VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
 
-  return nullptr;
+  vk::InstanceCreateInfo create_info(
+      vk::InstanceCreateFlags(VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR),
+      &app_info, 0, nullptr, required_extensions.size(),
+      required_extensions.data());
+
+  vk::Result result = vk::createInstance(&create_info, nullptr, instance);
+  if (result != vk::Result::eSuccess) {
+    std::cerr << "Failed to create Vulkan instance" << std::endl;
+    return false;
+  }
+
+  return true;
 }
 
 bool Application::Init() {
   m_window = CreateWindow(m_window_title, m_window_width, m_window_height);
   if (m_window == nullptr) {
-    std::cerr << "Failed to create GLFW window" << std::endl;
+    return false;
+  }
+
+  if (!CreateInstance(m_instance, m_app_name, m_app_major, m_app_minor, m_app_patch)) {
+    return false;
   }
 
   m_should_run = true;
@@ -131,6 +155,8 @@ bool Application::Render() {
 }
 
 bool Application::Exit() {
+  m_instance->destroy();
+
   glfwDestroyWindow(m_window);
   glfwTerminate();
 
