@@ -5,9 +5,8 @@
 #ifndef BOGUS_APPLICATION_HPP
 #define BOGUS_APPLICATION_HPP
 
-#define GLFW_INCLUDE_VULKAN
-
 #include <GLFW/glfw3.h>
+#include <vulkan/vulkan.hpp>
 
 #include <iostream>
 #include <memory>
@@ -17,7 +16,9 @@ namespace bogus {
 
 class Application {
 public:
-  Application(const int width, const int height, const std::string &title);
+  Application(const std::string &app_name, int app_major, int app_minor,
+              int app_patch, const std::string &window_title, int window_width,
+              int window_height);
   virtual ~Application();
   bool Run();
 
@@ -29,19 +30,25 @@ protected:
   virtual bool OnExit() { return true; };
 
 private:
-  const int m_width;
-  const int m_height;
-  const std::string m_title;
+  const std::string m_app_name;
+  const int m_app_major;
+  const int m_app_minor;
+  const int m_app_patch;
+
+  const std::string m_window_title;
+  const int m_window_width;
+  const int m_window_height;
+
   bool m_should_run;
+
   GLFWwindow *m_window;
+  vk::Instance *m_instance;
 
   bool Init();
   bool Events();
   bool Update();
   bool Render();
   bool Exit();
-
-  bool InitWindow();
 };
 
 } // namespace bogus
