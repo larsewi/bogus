@@ -66,7 +66,8 @@ static GLFWwindow *CreateWindow(const std::string &title, int width,
   }
   glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API); // We are not using OpenGL
   glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // Resizing windows not supported
-  GLFWwindow *window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+  GLFWwindow *window =
+      glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
   if (window == nullptr) {
     std::cerr << "Failed to create GLFW window" << std::endl;
     return nullptr;
@@ -74,14 +75,15 @@ static GLFWwindow *CreateWindow(const std::string &title, int width,
   return window;
 }
 
-static bool CreateInstance(VkInstance *instance, const std::string &name, int major,
-                                   int minor, int patch) {
+static bool CreateInstance(VkInstance *instance, const std::string &name,
+                           int major, int minor, int patch) {
   VkApplicationInfo app_info{};
   app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
   app_info.pApplicationName = name.c_str();
   app_info.applicationVersion = VK_MAKE_VERSION(major, minor, patch);
   app_info.pEngineName = ENGINE_NAME;
-  app_info.engineVersion = VK_MAKE_VERSION(ENGINE_MAJOR, ENGINE_MINOR, ENGINE_PATCH);
+  app_info.engineVersion =
+      VK_MAKE_VERSION(ENGINE_MAJOR, ENGINE_MINOR, ENGINE_PATCH);
   app_info.apiVersion = VK_API_VERSION_1_3;
 
   uint32_t glfw_extension_count = 0;
@@ -108,7 +110,8 @@ static bool CreateInstance(VkInstance *instance, const std::string &name, int ma
 
   VkResult result = vkCreateInstance(&create_info, nullptr, instance);
   if (result != VK_SUCCESS) {
-    std::cerr << "Failed to create Vulkan instance (" << result << ")" << std::endl;
+    std::cerr << "Failed to create Vulkan instance (" << result << ")"
+              << std::endl;
     return false;
   }
 
@@ -121,7 +124,8 @@ bool Application::Init() {
     return false;
   }
 
-  if (!CreateInstance(&m_instance, m_app_name, m_app_major, m_app_minor, m_app_patch)) {
+  if (!CreateInstance(&m_instance, m_app_name, m_app_major, m_app_minor,
+                      m_app_patch)) {
     return false;
   }
 
