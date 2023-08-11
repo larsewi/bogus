@@ -11,6 +11,7 @@
 #define ENGINE_PATCH 0
 
 #include <iostream>
+#include <vector>
 
 #include "application.hpp"
 
@@ -73,12 +74,15 @@ static GLFWwindow *CreateWindow(const std::string &title, int width,
   return window;
 }
 
-static bool CreateInstance(vk::Instance *instance, const std::string &name, int major,
+static bool CreateInstance(VkInstance *instance, const std::string &name, int major,
                                    int minor, int patch) {
-  vk::ApplicationInfo app_info(
-      name.c_str(), VK_MAKE_VERSION(major, minor, patch), ENGINE_NAME,
-      VK_MAKE_VERSION(ENGINE_MAJOR, ENGINE_MINOR, ENGINE_PATCH),
-      VK_API_VERSION_1_1);
+  VkApplicationInfo app_info{};
+  app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+  app_info.pApplicationName = name.c_str();
+  app_info.applicationVersion = VK_MAKE_VERSION(major, minor, patch);
+  app_info.pEngineName = ENGINE_NAME;
+  app_info.engineVersion = VK_MAKE_VERSION(ENGINE_MAJOR, ENGINE_MINOR, ENGINE_PATCH);
+  app_info.apiVersion = VK_API_VERSION_1_3;
 
   uint32_t glfw_extension_count = 0;
   const char **glfw_extension_names =
@@ -95,14 +99,16 @@ static bool CreateInstance(vk::Instance *instance, const std::string &name, int 
   required_extensions.emplace_back(
       VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
 
-  vk::InstanceCreateInfo create_info(
-      vk::InstanceCreateFlags(VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR),
-      &app_info, 0, nullptr, required_extensions.size(),
-      required_extensions.data());
+  VkInstanceCreateInfo create_info{};
+  create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+  create_info.pApplicationInfo = &app_info;
+  create_info.enabledExtensionCount = required_extensions.size();
+  create_info.ppEnabledExtensionNames = required_extensions.data();
+  create_info.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
 
-  vk::Result result = vk::createInstance(&create_info, nullptr, instance);
-  if (result != vk::Result::eSuccess) {
-    std::cerr << "Failed to create Vulkan instance" << std::endl;
+  VkResult result = vkCreateInstance(&create_info, nullptr, instance);
+  if (result != VK_SUCCESS) {
+    std::cerr << "Failed to create Vulkan instance (" << result << ")" << std::endl;
     return false;
   }
 
@@ -115,7 +121,7 @@ bool Application::Init() {
     return false;
   }
 
-  if (!CreateInstance(m_instance, m_app_name, m_app_major, m_app_minor, m_app_patch)) {
+  if (!CreateInstance(&m_instance, m_app_name, m_app_major, m_app_minor, m_app_patch)) {
     return false;
   }
 
@@ -155,7 +161,7 @@ bool Application::Render() {
 }
 
 bool Application::Exit() {
-  m_instance->destroy();
+  vkDestroyInstance(m_instance, nullptr);
 
   glfwDestroyWindow(m_window);
   glfwTerminate();

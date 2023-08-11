@@ -6,7 +6,7 @@
 #define BOGUS_APPLICATION_HPP
 
 #include <GLFW/glfw3.h>
-#include <vulkan/vulkan.hpp>
+#include <vulkan/vulkan.h>
 
 #include <iostream>
 #include <memory>
@@ -42,7 +42,7 @@ private:
   bool m_should_run;
 
   GLFWwindow *m_window;
-  vk::Instance *m_instance;
+  VkInstance m_instance;
 
   bool Init();
   bool Events();
