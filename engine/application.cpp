@@ -147,6 +147,19 @@ static bool CreateInstance(VkInstance *instance, const std::string &name,
   }
 #endif // NDEBUG
 
+  for (const std::string required : required_extensions) {
+    if (!std::any_of(
+            available_extensions.begin(), available_extensions.end(),
+            [&required](const VkExtensionProperties &extension_property) {
+              const std::string available(extension_property.extensionName);
+              return required == available;
+            })) {
+      std::cerr << "Critical: Required instance extension '" << required
+                << "' not available" << std::endl;
+      return false;
+    }
+  }
+
   VkInstanceCreateInfo create_info{};
   create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
   create_info.pApplicationInfo = &app_info;
