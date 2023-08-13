@@ -191,6 +191,11 @@ static bool CreateInstance(VkInstance *instance, const std::string &name,
       VK_MAKE_VERSION(ENGINE_MAJOR, ENGINE_MINOR, ENGINE_PATCH);
   app_info.apiVersion = VK_API_VERSION_1_3;
 
+  VkInstanceCreateInfo create_info{};
+  create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+  create_info.pApplicationInfo = &app_info;
+  create_info.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
+
   std::cout << "Debug: Getting required instance extensions" << std::endl;
   uint32_t extension_count = 0;
   const char **glfw_extension_names =
@@ -214,12 +219,8 @@ static bool CreateInstance(VkInstance *instance, const std::string &name,
     return false;
   }
 
-  VkInstanceCreateInfo create_info{};
-  create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-  create_info.pApplicationInfo = &app_info;
   create_info.enabledExtensionCount = required_extensions.size();
   create_info.ppEnabledExtensionNames = required_extensions.data();
-  create_info.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
 
 #ifndef NDEBUG
   std::cout << "Debug: Checking validation layer support" << std::endl;
