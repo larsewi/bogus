@@ -47,10 +47,6 @@ private:
   const int m_app_minor;
   const int m_app_patch;
 
-  const std::string m_window_title;
-  const int m_window_width;
-  const int m_window_height;
-
   bool m_should_run;
 
   std::unique_ptr<Window> m_window;

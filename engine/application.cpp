@@ -3,7 +3,6 @@
 //
 
 #define GLFW_INCLUDE_VULKAN
-#define VULKAN_HPP_NO_EXCEPTIONS
 
 #include <algorithm>
 #include <iostream>
@@ -29,9 +28,7 @@ Application::Application(const std::string &app_name, int app_major,
                          const std::string &window_title, int window_width,
                          int window_height)
     : m_app_name(app_name), m_app_major(app_major), m_app_minor(app_minor),
-      m_app_patch(app_patch), m_window_title(window_title),
-      m_window_width(window_width), m_window_height(window_height),
-      m_window(nullptr) {
+      m_app_patch(app_patch), m_window(nullptr) {
   std::cout << "Verbose: Creating window" << std::endl;
   m_window = std::make_unique<Window>(
       Window(window_title, window_width, window_height));

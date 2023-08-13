@@ -2,6 +2,7 @@
 add_library(bogus
         application.cpp
         window.cpp
+        instance.cpp
         )
 
 find_package(Vulkan REQUIRED)
