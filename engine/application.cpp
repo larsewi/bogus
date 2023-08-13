@@ -230,6 +230,8 @@ static bool CreateInstance(VkInstance *instance, const std::string &name,
   }
   create_info.enabledLayerCount = RequiredValidationLayers.size();
   create_info.ppEnabledLayerNames = RequiredValidationLayers.data();
+#else // !NDEBUG
+  create_info.enabledLayerCount = 0;
 #endif // NDEBUG
 
   VkResult result = vkCreateInstance(&create_info, nullptr, instance);
