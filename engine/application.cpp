@@ -22,7 +22,7 @@ using namespace bogus;
 static const std::vector<const char *> RequiredValidationLayers = {
     "VK_LAYER_KHRONOS_validation",
 };
-#endif // NDEBUG
+#endif
 
 Application::Application(const std::string &app_name, int app_major,
                          int app_minor, int app_patch,
@@ -30,7 +30,15 @@ Application::Application(const std::string &app_name, int app_major,
                          int window_height)
     : m_app_name(app_name), m_app_major(app_major), m_app_minor(app_minor),
       m_app_patch(app_patch), m_window_title(window_title),
-      m_window_width(window_width), m_window_height(window_height) {}
+      m_window_width(window_width), m_window_height(window_height),
+      m_window(nullptr) {
+  std::cout << "Verbose: Creating window" << std::endl;
+  m_window = std::make_unique<Window>(
+      Window(window_title, window_width, window_height));
+  if (!m_window) {
+    throw ApplicationException("Failed to create window");
+  }
+}
 
 Application::~Application() {}
 
@@ -40,7 +48,7 @@ bool Application::Run() {
     return false;
   }
 
-  while (m_should_run) {
+  while (!m_window->ShouldClose()) {
     if (!Events()) {
       std::cerr << "Critical: Failed to handle events" << std::endl;
       return false;
@@ -63,26 +71,6 @@ bool Application::Run() {
   }
 
   return true;
-}
-
-static GLFWwindow *CreateWindow(const std::string &title, int width,
-                                int height) {
-  std::cout << "Debug: Initializing GLFW" << std::endl;
-  if (glfwInit() == GLFW_FALSE) {
-    std::cerr << "Critical: Failed to initialize GLFW" << std::endl;
-    return nullptr;
-  }
-
-  std::cout << "Debug: Creating GLFW window" << std::endl;
-  glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API); // We are not using OpenGL
-  glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // Resizing windows not supported
-  GLFWwindow *window =
-      glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
-  if (window == nullptr) {
-    std::cerr << "Critical: Failed to create GLFW window" << std::endl;
-    return nullptr;
-  }
-  return window;
 }
 
 static bool
@@ -117,7 +105,7 @@ CheckInstanceExtensionSupport(std::vector<const char *> required_extensions) {
     std::cout << "Debug: Found available instance extension '" << available
               << "'" << std::endl;
   }
-#endif // NDEBUG
+#endif
 
   for (const std::string required : required_extensions) {
     if (!std::any_of(
@@ -178,7 +166,7 @@ CheckValidationLayerSupport(std::vector<const char *> required_layers) {
 
   return true;
 }
-#endif // NDEBUG
+#endif
 
 static bool CreateInstance(VkInstance *instance, const std::string &name,
                            int major, int minor, int patch) {
@@ -212,6 +200,9 @@ static bool CreateInstance(VkInstance *instance, const std::string &name,
   }
   required_extensions.emplace_back(
       VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
+#ifndef NDEBUG
+  required_extensions.emplace_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+#endif
 
   std::cout << "Debug: Checking instance extenstion support" << std::endl;
   if (!CheckInstanceExtensionSupport(required_extensions)) {
@@ -230,9 +221,9 @@ static bool CreateInstance(VkInstance *instance, const std::string &name,
   }
   create_info.enabledLayerCount = RequiredValidationLayers.size();
   create_info.ppEnabledLayerNames = RequiredValidationLayers.data();
-#else // !NDEBUG
+#else
   create_info.enabledLayerCount = 0;
-#endif // NDEBUG
+#endif
 
   VkResult result = vkCreateInstance(&create_info, nullptr, instance);
   if (result != VK_SUCCESS) {
@@ -245,13 +236,6 @@ static bool CreateInstance(VkInstance *instance, const std::string &name,
 }
 
 bool Application::Init() {
-  std::cout << "Verbose: Creating window" << std::endl;
-  m_window = CreateWindow(m_window_title, m_window_width, m_window_height);
-  if (m_window == nullptr) {
-    std::cerr << "Critical: Failed to create window" << std::endl;
-    return false;
-  }
-
   std::cout << "Verbose: Creating instance" << std::endl;
   if (!CreateInstance(&m_instance, m_app_name, m_app_major, m_app_minor,
                       m_app_patch)) {
@@ -263,7 +247,10 @@ bool Application::Init() {
 }
 
 bool Application::Events() {
-  glfwPollEvents();
+  if (!m_window->Events()) {
+    std::cerr << "Failed to handle window events" << std::endl;
+    return false;
+  }
 
   if (!OnEvent()) {
     return false;
@@ -272,8 +259,9 @@ bool Application::Events() {
 }
 
 bool Application::Update() {
-  if (glfwWindowShouldClose(m_window)) {
-    m_should_run = false;
+  if (!m_window->Update()) {
+    std::cerr << "Failed to handle window update" << std::endl;
+    return false;
   }
 
   if (!OnUpdate()) {
@@ -283,6 +271,11 @@ bool Application::Update() {
 }
 
 bool Application::Render() {
+  if (!m_window->Render()) {
+    std::cerr << "Failed to render window" << std::endl;
+    return false;
+  }
+
   if (!OnDraw()) {
     return false;
   }
@@ -291,9 +284,6 @@ bool Application::Render() {
 
 bool Application::Exit() {
   vkDestroyInstance(m_instance, nullptr);
-
-  glfwDestroyWindow(m_window);
-  glfwTerminate();
 
   if (!OnExit()) {
     return false;

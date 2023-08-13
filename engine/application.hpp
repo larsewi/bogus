@@ -5,16 +5,28 @@
 #ifndef BOGUS_APPLICATION_HPP
 #define BOGUS_APPLICATION_HPP
 
-#include <GLFW/glfw3.h>
+// #include <GLFW/glfw3.h>
 #include <vulkan/vulkan.h>
 
 #include <iostream>
 #include <memory>
 #include <string>
 
+#include "object.hpp"
+#include "window.hpp"
+
 namespace bogus {
 
-class Application {
+class ApplicationException : public std::exception {
+public:
+  ApplicationException(const std::string &message) : m_message(message) {}
+  virtual const char *what() const throw() { return m_message.c_str(); }
+
+private:
+  const std::string m_message;
+};
+
+class Application : public Object {
 public:
   Application(const std::string &app_name, int app_major, int app_minor,
               int app_patch, const std::string &window_title, int window_width,
@@ -41,13 +53,13 @@ private:
 
   bool m_should_run;
 
-  GLFWwindow *m_window;
+  std::unique_ptr<Window> m_window;
   VkInstance m_instance;
 
   bool Init();
-  bool Events();
-  bool Update();
-  bool Render();
+  bool Events() override;
+  bool Update() override;
+  bool Render() override;
   bool Exit();
 };
 
