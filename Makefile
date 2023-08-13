@@ -1,6 +1,9 @@
-.PHONY: all configure compile run clean dependencies
+.PHONY: all format configure compile run clean dependencies
 
-all: compile run
+all: format compile run
+
+format:
+	clang-format -i engine/*.?pp sandbox/*.?pp
 
 configure:
 	cmake . -DCMAKE_BUILD_TYPE=Debug -B build/

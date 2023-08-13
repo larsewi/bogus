@@ -5,17 +5,28 @@
 #define GLFW_INCLUDE_VULKAN
 #define VULKAN_HPP_NO_EXCEPTIONS
 
-#define ENGINE_NAME "bogus"
-#define ENGINE_MAJOR 1
-#define ENGINE_MINOR 0
-#define ENGINE_PATCH 0
-
+#include <algorithm>
 #include <iostream>
 #include <vector>
 
 #include "application.hpp"
 
 using namespace bogus;
+
+#define ENGINE_NAME "bogus"
+#define ENGINE_MAJOR 1
+#define ENGINE_MINOR 0
+#define ENGINE_PATCH 0
+
+#ifdef NDEBUG
+static const bool EnableValidationLayers = false;
+#else  // !NDEBUG
+static const bool EnableValidationLayers = true;
+#endif // NDEBUG
+
+static const std::vector<const char *> ValidationLayers = {
+    "VK_LAYER_KHRONOS_validation",
+};
 
 Application::Application(const std::string &app_name, int app_major,
                          int app_minor, int app_patch,
@@ -29,29 +40,29 @@ Application::~Application() {}
 
 bool Application::Run() {
   if (!Init()) {
-    std::cerr << "An error occured while initializing " << std::endl;
+    std::cerr << "Critical: Failed to initialize" << std::endl;
     return false;
   }
 
   while (m_should_run) {
     if (!Events()) {
-      std::cerr << "An error occured while handling events" << std::endl;
+      std::cerr << "Critical: Failed to handle events" << std::endl;
       return false;
     }
 
     if (!Update()) {
-      std::cerr << "An error occured while updating" << std::endl;
+      std::cerr << "Critical: Failed to update" << std::endl;
       return false;
     }
 
     if (!Render()) {
-      std::cerr << "An error occured while rendering" << std::endl;
+      std::cerr << "Critical: Failed to render" << std::endl;
       return false;
     }
   }
 
   if (!Exit()) {
-    std::cerr << "An error occured while exiting" << std::endl;
+    std::cerr << "Critical: Failed to exit" << std::endl;
     return false;
   }
 
@@ -60,16 +71,19 @@ bool Application::Run() {
 
 static GLFWwindow *CreateWindow(const std::string &title, int width,
                                 int height) {
+  std::cout << "Debug: Initializing GLFW" << std::endl;
   if (glfwInit() == GLFW_FALSE) {
-    std::cerr << "Failed to initialize GLFW" << std::endl;
+    std::cerr << "Critical: Failed to initialize GLFW" << std::endl;
     return nullptr;
   }
+
+  std::cout << "Debug: Creating GLFW window" << std::endl;
   glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API); // We are not using OpenGL
   glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // Resizing windows not supported
   GLFWwindow *window =
       glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
   if (window == nullptr) {
-    std::cerr << "Failed to create GLFW window" << std::endl;
+    std::cerr << "Critical: Failed to create GLFW window" << std::endl;
     return nullptr;
   }
   return window;
@@ -86,20 +100,52 @@ static bool CreateInstance(VkInstance *instance, const std::string &name,
       VK_MAKE_VERSION(ENGINE_MAJOR, ENGINE_MINOR, ENGINE_PATCH);
   app_info.apiVersion = VK_API_VERSION_1_3;
 
-  uint32_t glfw_extension_count = 0;
+  std::cout << "Debug: Getting required instance extensions" << std::endl;
+  uint32_t extension_count = 0;
   const char **glfw_extension_names =
-      glfwGetRequiredInstanceExtensions(&glfw_extension_count);
+      glfwGetRequiredInstanceExtensions(&extension_count);
   if (glfw_extension_names == nullptr) {
-    std::cerr << "Failed to get required GLFW instance extensions" << std::endl;
+    std::cerr << "Critical: Failed to get required GLFW instance extensions"
+              << std::endl;
     return false;
   }
 
   std::vector<const char *> required_extensions;
-  for (uint32_t i = 0; i < glfw_extension_count; i++) {
+  for (uint32_t i = 0; i < extension_count; i++) {
     required_extensions.emplace_back(glfw_extension_names[i]);
   }
   required_extensions.emplace_back(
       VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
+
+#ifndef NDEBUG
+  for (auto required : required_extensions) {
+    std::cout << "Debug: Found required instance extension '" << required << "'"
+              << std::endl;
+  }
+#endif // NDEBUG
+
+  std::cout << "Debug: Checking available instance extensions" << std::endl;
+  if ((vkEnumerateInstanceExtensionProperties(nullptr, &extension_count,
+                                              nullptr) != VK_SUCCESS)) {
+    std::cout
+        << "Critical: Failed to query number of available instance extensions"
+        << std::endl;
+  }
+  std::vector<VkExtensionProperties> available_extensions(extension_count);
+  if (vkEnumerateInstanceExtensionProperties(nullptr, &extension_count,
+                                             available_extensions.data()) !=
+      VK_SUCCESS) {
+    std::cout << "Critical: Failed to query available instance extensions"
+              << std::endl;
+  }
+
+#ifndef NDEBUG
+  for (const auto &extension : available_extensions) {
+    auto available = extension.extensionName;
+    std::cout << "Debug: Found available instance extension '" << available
+              << "'" << std::endl;
+  }
+#endif // NDEBUG
 
   VkInstanceCreateInfo create_info{};
   create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -110,7 +156,7 @@ static bool CreateInstance(VkInstance *instance, const std::string &name,
 
   VkResult result = vkCreateInstance(&create_info, nullptr, instance);
   if (result != VK_SUCCESS) {
-    std::cerr << "Failed to create Vulkan instance (" << result << ")"
+    std::cerr << "Critical: Failed to create Vulkan instance (" << result << ")"
               << std::endl;
     return false;
   }
@@ -118,15 +164,42 @@ static bool CreateInstance(VkInstance *instance, const std::string &name,
   return true;
 }
 
-bool Application::Init() {
-  m_window = CreateWindow(m_window_title, m_window_width, m_window_height);
-  if (m_window == nullptr) {
+static bool CheckValidationLayerSupport() {
+  std::cout << "Debug: Counting number of available validation layers"
+            << std::endl;
+  uint32_t layer_count;
+  if (vkEnumerateInstanceLayerProperties(&layer_count, nullptr) != VK_SUCCESS) {
+    std::cout
+        << "Warning: Failed to count number of available validation layers"
+        << std::endl;
     return false;
   }
 
+  return true;
+}
+
+bool Application::Init() {
+  std::cout << "Verbose: Creating window" << std::endl;
+  m_window = CreateWindow(m_window_title, m_window_width, m_window_height);
+  if (m_window == nullptr) {
+    std::cerr << "Critical: Failed to create window" << std::endl;
+    return false;
+  }
+
+  std::cout << "Verbose: Creating instance" << std::endl;
   if (!CreateInstance(&m_instance, m_app_name, m_app_major, m_app_minor,
                       m_app_patch)) {
+    std::cerr << "Critical: Failed to create instance" << std::endl;
     return false;
+  }
+
+  if (EnableValidationLayers) {
+    std::cout << "Verbose: Checking validation layers" << std::endl;
+    if (CheckValidationLayerSupport()) {
+
+    } else {
+      std::cout << "Warning: Failed to check validation layers" << std::endl;
+    }
   }
 
   m_should_run = true;
