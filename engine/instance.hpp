@@ -24,7 +24,9 @@ private:
 class Instance : public Object {
 public:
   Instance(const std::string &name, int major, int minor, int patch,
-           const Window &window);
+           const std::unique_ptr<Window> &window);
+  Instance(const Instance &instance) = default;
+  ~Instance();
   bool Events() override;
   bool Update() override;
   bool Render() override;
@@ -34,6 +36,7 @@ private:
   const int m_major;
   const int m_minor;
   const int m_patch;
+  VkInstance m_instance;
 };
 
 } // namespace bogus

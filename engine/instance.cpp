@@ -15,10 +15,10 @@ static const std::vector<const char *> RequiredValidationLayers = {
 };
 #endif
 
-static bool
-CheckInstanceExtensionSupport(std::vector<const char *> required_extensions) {
+static bool CheckInstanceExtensionSupport(
+    std::unique_ptr<std::vector<const char *>> &required_extensions) {
 #ifndef NDEBUG
-  for (auto required : required_extensions) {
+  for (auto const &required : *required_extensions) {
     std::cout << "Debug: Found required instance extension '" << required << "'"
               << std::endl;
   }
@@ -49,7 +49,7 @@ CheckInstanceExtensionSupport(std::vector<const char *> required_extensions) {
   }
 #endif
 
-  for (const std::string required : required_extensions) {
+  for (const std::string &required : *required_extensions) {
     if (!std::any_of(
             available_extensions.begin(), available_extensions.end(),
             [&required](const VkExtensionProperties &extension_property) {
@@ -111,7 +111,7 @@ CheckValidationLayerSupport(std::vector<const char *> required_layers) {
 #endif
 
 Instance::Instance(const std::string &name, int major, int minor, int patch,
-                   const Window &window)
+                   const std::unique_ptr<Window> &window)
     : m_name(name), m_major(major), m_minor(minor), m_patch(patch) {
   VkApplicationInfo app_info{};
   app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -126,7 +126,39 @@ Instance::Instance(const std::string &name, int major, int minor, int patch,
   create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
   create_info.pApplicationInfo = &app_info;
   create_info.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
+
+  auto required_extensions = window->GetExtensions();
+  required_extensions->push_back(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
+#ifndef NDEBUG
+  required_extensions->push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+#endif
+
+  std::cout << "Debug: Checking instance extenstion support" << std::endl;
+  if (!CheckInstanceExtensionSupport(required_extensions)) {
+    throw InstanceException("Unsupported required instance extensions");
+  }
+
+  create_info.enabledExtensionCount = required_extensions->size();
+  create_info.ppEnabledExtensionNames = required_extensions->data();
+
+#ifndef NDEBUG
+  std::cout << "Debug: Checking validation layer support" << std::endl;
+  if (!CheckValidationLayerSupport(RequiredValidationLayers)) {
+    throw InstanceException("Unsupported required validation layer");
+  }
+  create_info.enabledLayerCount = RequiredValidationLayers.size();
+  create_info.ppEnabledLayerNames = RequiredValidationLayers.data();
+#else
+  create_info.enabledLayerCount = 0;
+#endif
+
+  VkResult result = vkCreateInstance(&create_info, nullptr, &m_instance);
+  if (result != VK_SUCCESS) {
+    throw InstanceException("Failed to create vulkan instance");
+  }
 }
+
+Instance::~Instance() { vkDestroyInstance(m_instance, nullptr); }
 
 bool Instance::Events() { return true; }
 

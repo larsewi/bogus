@@ -5,13 +5,11 @@
 #ifndef BOGUS_APPLICATION_HPP
 #define BOGUS_APPLICATION_HPP
 
-// #include <GLFW/glfw3.h>
-#include <vulkan/vulkan.h>
-
 #include <iostream>
 #include <memory>
 #include <string>
 
+#include "instance.hpp"
 #include "object.hpp"
 #include "window.hpp"
 
@@ -31,7 +29,6 @@ public:
   Application(const std::string &app_name, int app_major, int app_minor,
               int app_patch, const std::string &window_title, int window_width,
               int window_height);
-  virtual ~Application();
   bool Run();
 
 protected:
@@ -42,21 +39,12 @@ protected:
   virtual bool OnExit() { return true; };
 
 private:
-  const std::string m_app_name;
-  const int m_app_major;
-  const int m_app_minor;
-  const int m_app_patch;
-
-  bool m_should_run;
-
   std::unique_ptr<Window> m_window;
-  VkInstance m_instance;
+  std::unique_ptr<Instance> m_instance;
 
-  bool Init();
   bool Events() override;
   bool Update() override;
   bool Render() override;
-  bool Exit();
 };
 
 } // namespace bogus

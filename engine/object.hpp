@@ -4,9 +4,6 @@
 namespace bogus {
 
 class Object {
-public:
-  virtual ~Object() {}
-
 protected:
   virtual bool Events() { return true; }
   virtual bool Update() { return true; }
