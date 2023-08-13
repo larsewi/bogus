@@ -18,15 +18,11 @@ using namespace bogus;
 #define ENGINE_MINOR 0
 #define ENGINE_PATCH 0
 
-#ifdef NDEBUG
-static const bool EnableValidationLayers = false;
-#else  // !NDEBUG
-static const bool EnableValidationLayers = true;
-#endif // NDEBUG
-
-static const std::vector<const char *> ValidationLayers = {
+#ifndef NDEBUG
+static const std::vector<const char *> RequiredValidationLayers = {
     "VK_LAYER_KHRONOS_validation",
 };
+#endif // NDEBUG
 
 Application::Application(const std::string &app_name, int app_major,
                          int app_minor, int app_patch,
@@ -89,6 +85,101 @@ static GLFWwindow *CreateWindow(const std::string &title, int width,
   return window;
 }
 
+static bool
+CheckInstanceExtensionSupport(std::vector<const char *> required_extensions) {
+#ifndef NDEBUG
+  for (auto required : required_extensions) {
+    std::cout << "Debug: Found required instance extension '" << required << "'"
+              << std::endl;
+  }
+#endif // NDEBUG
+
+  uint32_t extension_count;
+  if ((vkEnumerateInstanceExtensionProperties(nullptr, &extension_count,
+                                              nullptr) != VK_SUCCESS)) {
+    std::cout
+        << "Critical: Failed to query number of available instance extensions"
+        << std::endl;
+    return false;
+  }
+  std::vector<VkExtensionProperties> available_extensions(extension_count);
+  if (vkEnumerateInstanceExtensionProperties(nullptr, &extension_count,
+                                             available_extensions.data()) !=
+      VK_SUCCESS) {
+    std::cout << "Critical: Failed to query available instance extensions"
+              << std::endl;
+    return false;
+  }
+
+#ifndef NDEBUG
+  for (const auto &extension : available_extensions) {
+    auto available = extension.extensionName;
+    std::cout << "Debug: Found available instance extension '" << available
+              << "'" << std::endl;
+  }
+#endif // NDEBUG
+
+  for (const std::string required : required_extensions) {
+    if (!std::any_of(
+            available_extensions.begin(), available_extensions.end(),
+            [&required](const VkExtensionProperties &extension_property) {
+              const std::string available(extension_property.extensionName);
+              return required == available;
+            })) {
+      std::cerr << "Critical: Required instance extension '" << required
+                << "' not available" << std::endl;
+      return false;
+    }
+  }
+
+  return true;
+}
+
+#ifndef NDEBUG
+static bool
+CheckValidationLayerSupport(std::vector<const char *> required_layers) {
+  for (auto required : required_layers) {
+    std::cout << "Debug: Found required validation layer '" << required << "'"
+              << std::endl;
+  }
+
+  uint32_t layer_count;
+  if (vkEnumerateInstanceLayerProperties(&layer_count, nullptr) != VK_SUCCESS) {
+    std::cout
+        << "Critical: Failed to query number of available validation layers"
+        << std::endl;
+    return false;
+  }
+  std::vector<VkLayerProperties> available_layers(layer_count);
+  if (vkEnumerateInstanceLayerProperties(
+          &layer_count, available_layers.data()) != VK_SUCCESS) {
+    std::cout << "Critical: Failed to query available validation layers"
+              << std::endl;
+    return false;
+  }
+
+  for (const auto layer : available_layers) {
+    auto available = layer.layerName;
+    std::cout << "Debug: Found available validation layer '" << available << "'"
+              << std::endl;
+  }
+
+  for (const std::string required : required_layers) {
+    if (!std::any_of(available_layers.begin(), available_layers.end(),
+                     [&required](const VkLayerProperties &layer_property) {
+                       const std::string available(layer_property.layerName);
+                       return required == available;
+                     })) {
+      std::cerr << "Critical: Required validation layer '" << required
+                << "' not available" << std::endl;
+      return false;
+    }
+  }
+
+  return true;
+}
+#endif // NDEBUG
+
 static bool CreateInstance(VkInstance *instance, const std::string &name,
                            int major, int minor, int patch) {
   VkApplicationInfo app_info{};
@@ -117,47 +208,10 @@ static bool CreateInstance(VkInstance *instance, const std::string &name,
   required_extensions.emplace_back(
       VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
 
-#ifndef NDEBUG
-  for (auto required : required_extensions) {
-    std::cout << "Debug: Found required instance extension '" << required << "'"
-              << std::endl;
-  }
-#endif // NDEBUG
-
-  std::cout << "Debug: Checking available instance extensions" << std::endl;
-  if ((vkEnumerateInstanceExtensionProperties(nullptr, &extension_count,
-                                              nullptr) != VK_SUCCESS)) {
-    std::cout
-        << "Critical: Failed to query number of available instance extensions"
-        << std::endl;
-  }
-  std::vector<VkExtensionProperties> available_extensions(extension_count);
-  if (vkEnumerateInstanceExtensionProperties(nullptr, &extension_count,
-                                             available_extensions.data()) !=
-      VK_SUCCESS) {
-    std::cout << "Critical: Failed to query available instance extensions"
-              << std::endl;
-  }
-
-#ifndef NDEBUG
-  for (const auto &extension : available_extensions) {
-    auto available = extension.extensionName;
-    std::cout << "Debug: Found available instance extension '" << available
-              << "'" << std::endl;
-  }
-#endif // NDEBUG
-
-  for (const std::string required : required_extensions) {
-    if (!std::any_of(
-            available_extensions.begin(), available_extensions.end(),
-            [&required](const VkExtensionProperties &extension_property) {
-              const std::string available(extension_property.extensionName);
-              return required == available;
-            })) {
-      std::cerr << "Critical: Required instance extension '" << required
-                << "' not available" << std::endl;
-      return false;
-    }
+  std::cout << "Debug: Checking instance extenstion support" << std::endl;
+  if (!CheckInstanceExtensionSupport(required_extensions)) {
+    std::cerr << "Critical: Found unsupported instance extension" << std::endl;
+    return false;
   }
 
   VkInstanceCreateInfo create_info{};
@@ -167,24 +221,20 @@ static bool CreateInstance(VkInstance *instance, const std::string &name,
   create_info.ppEnabledExtensionNames = required_extensions.data();
   create_info.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
 
+#ifndef NDEBUG
+  std::cout << "Debug: Checking validation layer support" << std::endl;
+  if (!CheckValidationLayerSupport(RequiredValidationLayers)) {
+    std::cerr << "Critical: Found unsupported validation layer" << std::endl;
+    return false;
+  }
+  create_info.enabledLayerCount = RequiredValidationLayers.size();
+  create_info.ppEnabledLayerNames = RequiredValidationLayers.data();
+#endif // NDEBUG
+
   VkResult result = vkCreateInstance(&create_info, nullptr, instance);
   if (result != VK_SUCCESS) {
     std::cerr << "Critical: Failed to create Vulkan instance (" << result << ")"
               << std::endl;
-    return false;
-  }
-
-  return true;
-}
-
-static bool CheckValidationLayerSupport() {
-  std::cout << "Debug: Counting number of available validation layers"
-            << std::endl;
-  uint32_t layer_count;
-  if (vkEnumerateInstanceLayerProperties(&layer_count, nullptr) != VK_SUCCESS) {
-    std::cout
-        << "Warning: Failed to count number of available validation layers"
-        << std::endl;
     return false;
   }
 
@@ -206,20 +256,6 @@ bool Application::Init() {
     return false;
   }
 
-  if (EnableValidationLayers) {
-    std::cout << "Verbose: Checking validation layers" << std::endl;
-    if (CheckValidationLayerSupport()) {
-
-    } else {
-      std::cout << "Warning: Failed to check validation layers" << std::endl;
-    }
-  }
-
-  m_should_run = true;
-
-  if (!OnInit()) {
-    return false;
-  }
   return true;
 }
 
