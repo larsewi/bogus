@@ -149,8 +149,7 @@ Instance::Instance(const std::string &name, int major, int minor, int patch,
   create_info.enabledLayerCount = RequiredValidationLayers.size();
   create_info.ppEnabledLayerNames = RequiredValidationLayers.data();
 
-  // This debug messenger is only used during vkInstanceCreate and
-  // vkInstanceDestroy
+  // This debug messenger is only used during instance create and destroy
   VkDebugUtilsMessengerCreateInfoEXT debug_create_info =
       DebugMessenger::GetCreateInfo();
   create_info.pNext = &debug_create_info;
