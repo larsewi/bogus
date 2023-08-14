@@ -1,17 +1,17 @@
-.PHONY: all format configure compile run clean dependencies
+.PHONY: all debug release clean dependencies
 
-all: format compile run
+all: debug
 
-format:
+debug:
 	clang-format -i engine/*.?pp sandbox/*.?pp
-
-configure:
 	cmake . -DCMAKE_BUILD_TYPE=Debug -B build/
-
-compile:
 	make -C build/
+	./build/sandbox/sandbox
 
-run:
+release:
+	clang-format -i engine/*.?pp sandbox/*.?pp
+	cmake . -DCMAKE_BUILD_TYPE=Release -B build/
+	make -C build/
 	./build/sandbox/sandbox
 
 clean:

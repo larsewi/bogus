@@ -29,6 +29,7 @@ public:
   Application(const std::string &app_name, int app_major, int app_minor,
               int app_patch, const std::string &window_title, int window_width,
               int window_height);
+  ~Application();
   bool Run();
 
 protected:
@@ -39,8 +40,8 @@ protected:
   virtual bool OnExit() { return true; };
 
 private:
-  std::unique_ptr<Window> m_window;
-  std::unique_ptr<Instance> m_instance;
+  Window *m_window;
+  Instance *m_instance;
 
   bool Events() override;
   bool Update() override;

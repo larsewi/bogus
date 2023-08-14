@@ -3,6 +3,7 @@ add_library(bogus
         application.cpp
         window.cpp
         instance.cpp
+        debug_messenger.cpp
         )
 
 find_package(Vulkan REQUIRED)

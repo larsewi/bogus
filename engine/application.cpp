@@ -21,10 +21,14 @@ Application::Application(const std::string &app_name, int app_major,
                          int app_minor, int app_patch,
                          const std::string &window_title, int window_width,
                          int window_height)
-    : m_window(
-          std::make_unique<Window>(window_title, window_width, window_height)),
-      m_instance(std::make_unique<Instance>(app_name, app_major, app_minor,
-                                            app_patch, m_window)) {}
+    : m_window(new Window(window_title, window_width, window_height)),
+      m_instance(
+          new Instance(app_name, app_major, app_minor, app_patch, m_window)) {}
+
+Application::~Application() {
+  delete m_instance;
+  delete m_window;
+}
 
 bool Application::Run() {
   if (!OnInit()) {

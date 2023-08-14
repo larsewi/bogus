@@ -111,7 +111,7 @@ CheckValidationLayerSupport(std::vector<const char *> required_layers) {
 #endif
 
 Instance::Instance(const std::string &name, int major, int minor, int patch,
-                   const std::unique_ptr<Window> &window)
+                   Window *window)
     : m_name(name), m_major(major), m_minor(minor), m_patch(patch) {
   VkApplicationInfo app_info{};
   app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -156,9 +156,18 @@ Instance::Instance(const std::string &name, int major, int minor, int patch,
   if (result != VK_SUCCESS) {
     throw InstanceException("Failed to create vulkan instance");
   }
+
+#ifndef NDEBUG
+  m_debug_messenger = new DebugMessenger(m_instance);
+#else
+  m_debug_messenger = nullptr;
+#endif
 }
 
-Instance::~Instance() { vkDestroyInstance(m_instance, nullptr); }
+Instance::~Instance() {
+  delete m_debug_messenger;
+  vkDestroyInstance(m_instance, nullptr);
+}
 
 bool Instance::Events() { return true; }
 
