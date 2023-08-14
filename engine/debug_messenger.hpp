@@ -16,9 +16,9 @@ private:
 
 class DebugMessenger {
 public:
-  DebugMessenger() = default;
   DebugMessenger(VkInstance &m_instance);
   ~DebugMessenger();
+  static VkDebugUtilsMessengerCreateInfoEXT GetCreateInfo();
 
 private:
   VkInstance m_instance;
