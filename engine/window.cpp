@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include <spdlog/spdlog.h>
+
 #include "window.hpp"
 
 #define GLFW_INCLUDE_VULKAN
@@ -9,7 +11,7 @@ using namespace bogus;
 Window::Window(const std::string &title, int width, int height)
     : m_title(title), m_width(width), m_height(height),
       m_window(nullptr, nullptr), m_should_close(false) {
-  std::cout << "Debug: Initializing GLFW" << std::endl;
+  spdlog::debug("Initializing GLFW");
   if (glfwInit() == GLFW_FALSE) {
     throw WindowException("Failed to initialize GLFW");
   }
@@ -17,7 +19,7 @@ Window::Window(const std::string &title, int width, int height)
   glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API); // We are not using OpenGL
   glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // Resizing windows not supported
 
-  std::cout << "Debug: Creating GLFW window" << std::endl;
+  spdlog::debug("Creating GLFW window");
   m_window = std::unique_ptr<GLFWwindow, void (*)(GLFWwindow *)>(
       glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr),
       &glfwDestroyWindow);

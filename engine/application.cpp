@@ -8,6 +8,8 @@
 #include <iostream>
 #include <vector>
 
+#include <spdlog/spdlog.h>
+
 #include "application.hpp"
 
 using namespace bogus;
@@ -20,53 +22,48 @@ using namespace bogus;
 Application::Application(const std::string &app_name, int app_major,
                          int app_minor, int app_patch,
                          const std::string &window_title, int window_width,
-                         int window_height)
-    : m_window(new Window(window_title, window_width, window_height)),
-      m_instance(
-          new Instance(app_name, app_major, app_minor, app_patch, m_window)) {}
+                         int window_height) {
+  spdlog::set_level(spdlog::level::debug);
+
+  spdlog::info("Creating window");
+  m_window = new Window(window_title, window_width, window_height);
+
+  spdlog::info("Creating instance");
+  m_instance =
+      new Instance(app_name, app_major, app_minor, app_patch, m_window);
+}
 
 Application::~Application() {
+  spdlog::info("Destroying instance");
   delete m_instance;
+
+  spdlog::info("Destroying window");
   delete m_window;
 }
 
 bool Application::Run() {
   if (!OnInit()) {
-    std::cerr << "Critical: Failed to initialize" << std::endl;
     return false;
   }
 
   while (!m_window->ShouldClose()) {
     if (!Events()) {
-      std::cerr << "Critical: Failed to handle events" << std::endl;
-      return false;
-    }
-
-    if (!OnEvent()) {
+      spdlog::error("Failed to handle events");
       return false;
     }
 
     if (!Update()) {
-      std::cerr << "Critical: Failed to update" << std::endl;
-      return false;
-    }
-
-    if (!OnUpdate()) {
+      spdlog::error("Failed to update");
       return false;
     }
 
     if (!Render()) {
-      std::cerr << "Critical: Failed to render" << std::endl;
-      return false;
-    }
-
-    if (!OnDraw()) {
+      spdlog::error("Failed to render");
       return false;
     }
   }
 
   if (!OnExit()) {
-    std::cerr << "Critical: Failed to exit" << std::endl;
     return false;
   }
 
@@ -75,7 +72,11 @@ bool Application::Run() {
 
 bool Application::Events() {
   if (!m_window->Events()) {
-    std::cerr << "Failed to handle window events" << std::endl;
+    spdlog::error("Failed to handle window events");
+    return false;
+  }
+
+  if (!OnEvent()) {
     return false;
   }
 
@@ -84,7 +85,11 @@ bool Application::Events() {
 
 bool Application::Update() {
   if (!m_window->Update()) {
-    std::cerr << "Failed to handle window update" << std::endl;
+    spdlog::error("Failed to handle window updates");
+    return false;
+  }
+
+  if (!OnUpdate()) {
     return false;
   }
 
@@ -93,7 +98,11 @@ bool Application::Update() {
 
 bool Application::Render() {
   if (!m_window->Render()) {
-    std::cerr << "Failed to render window" << std::endl;
+    spdlog::error("Failed to render window");
+    return false;
+  }
+
+  if (!OnDraw()) {
     return false;
   }
 

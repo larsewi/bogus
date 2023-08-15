@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include <spdlog/spdlog.h>
+
 #include "instance.hpp"
 
 #define ENGINE_NAME "bogus"
@@ -18,34 +20,32 @@ static const std::vector<const char *> RequiredValidationLayers = {
 static bool CheckInstanceExtensionSupport(
     std::unique_ptr<std::vector<const char *>> &required_extensions) {
 #ifndef NDEBUG
+  spdlog::debug("Required instance extensions:");
   for (auto const &required : *required_extensions) {
-    std::cout << "Debug: Found required instance extension '" << required << "'"
-              << std::endl;
+    spdlog::debug("   {}", required);
   }
 #endif // NDEBUG
 
   uint32_t extension_count;
   if ((vkEnumerateInstanceExtensionProperties(nullptr, &extension_count,
                                               nullptr) != VK_SUCCESS)) {
-    std::cout
-        << "Critical: Failed to query number of available instance extensions"
-        << std::endl;
+    spdlog::error("Failed to query number of available instance extensions");
+    ;
     return false;
   }
   std::vector<VkExtensionProperties> available_extensions(extension_count);
   if (vkEnumerateInstanceExtensionProperties(nullptr, &extension_count,
                                              available_extensions.data()) !=
       VK_SUCCESS) {
-    std::cout << "Critical: Failed to query available instance extensions"
-              << std::endl;
+    spdlog::error("Failed to query available instance extensions");
     return false;
   }
 
 #ifndef NDEBUG
+  spdlog::debug("Available instance extensions:");
   for (const auto &extension : available_extensions) {
     auto available = extension.extensionName;
-    std::cout << "Debug: Found available instance extension '" << available
-              << "'" << std::endl;
+    spdlog::debug("   {}", available);
   }
 #endif
 
@@ -56,8 +56,7 @@ static bool CheckInstanceExtensionSupport(
               const std::string available(extension_property.extensionName);
               return required == available;
             })) {
-      std::cerr << "Critical: Required instance extension '" << required
-                << "' not available" << std::endl;
+      spdlog::error("Required instance extension '{}' not available", required);
       return false;
     }
   }
@@ -68,30 +67,27 @@ static bool CheckInstanceExtensionSupport(
 #ifndef NDEBUG
 static bool
 CheckValidationLayerSupport(std::vector<const char *> required_layers) {
+  spdlog::debug("Required validation layers:");
   for (auto required : required_layers) {
-    std::cout << "Debug: Found required validation layer '" << required << "'"
-              << std::endl;
+    spdlog::debug("   {}", required);
   }
 
   uint32_t layer_count;
   if (vkEnumerateInstanceLayerProperties(&layer_count, nullptr) != VK_SUCCESS) {
-    std::cout
-        << "Critical: Failed to query number of available validation layers"
-        << std::endl;
+    spdlog::error("Failed to query number of available validation layers");
     return false;
   }
   std::vector<VkLayerProperties> available_layers(layer_count);
   if (vkEnumerateInstanceLayerProperties(
           &layer_count, available_layers.data()) != VK_SUCCESS) {
-    std::cout << "Critical: Failed to query available validation layers"
-              << std::endl;
+    spdlog::error("Failed to query available validation layers");
     return false;
   }
 
+  spdlog::debug("Available validation layers:");
   for (const auto layer : available_layers) {
     auto available = layer.layerName;
-    std::cout << "Debug: Found available validation layer '" << available << "'"
-              << std::endl;
+    spdlog::debug("   {}", available);
   }
 
   for (const std::string required : required_layers) {
@@ -100,8 +96,8 @@ CheckValidationLayerSupport(std::vector<const char *> required_layers) {
                        const std::string available(layer_property.layerName);
                        return required == available;
                      })) {
-      std::cerr << "Critical: Required validation layer '" << required
-                << "' not available" << std::endl;
+      spdlog::error("Required validation layer '{}' is not available",
+                    required);
       return false;
     }
   }
@@ -133,7 +129,6 @@ Instance::Instance(const std::string &name, int major, int minor, int patch,
   required_extensions->push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 #endif
 
-  std::cout << "Debug: Checking instance extenstion support" << std::endl;
   if (!CheckInstanceExtensionSupport(required_extensions)) {
     throw InstanceException("Unsupported required instance extensions");
   }
@@ -142,7 +137,6 @@ Instance::Instance(const std::string &name, int major, int minor, int patch,
   create_info.ppEnabledExtensionNames = required_extensions->data();
 
 #ifndef NDEBUG
-  std::cout << "Debug: Checking validation layer support" << std::endl;
   if (!CheckValidationLayerSupport(RequiredValidationLayers)) {
     throw InstanceException("Unsupported required validation layer");
   }
