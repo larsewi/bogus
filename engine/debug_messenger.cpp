@@ -13,7 +13,7 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debug_messenger_callback(
 
   switch (message_severity) {
   case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
-    log::debug(callback_data->pMessage);
+    log::error(callback_data->pMessage);
     break;
 
   case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
@@ -21,11 +21,11 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debug_messenger_callback(
     break;
 
   case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
-    log::info(callback_data->pMessage);
+    log::debug(callback_data->pMessage);
     break;
 
   case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
-    log::debug(callback_data->pMessage);
+    log::trace(callback_data->pMessage);
     break;
 
   default:
