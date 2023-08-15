@@ -1,8 +1,7 @@
 #include <iostream>
 
-#include <spdlog/spdlog.h>
-
 #include "debug_messenger.hpp"
+#include "logger.hpp"
 
 using namespace bogus;
 
@@ -12,7 +11,7 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debug_messenger_callback(
     const VkDebugUtilsMessengerCallbackDataEXT *callback_data,
     void *pUserData) {
 
-  spdlog::info(callback_data->pMessage);
+  log::info(callback_data->pMessage);
 
   return VK_FALSE;
 }

@@ -1,8 +1,7 @@
 #include <iostream>
 
-#include <spdlog/spdlog.h>
-
 #include "instance.hpp"
+#include "logger.hpp"
 
 #define ENGINE_NAME "bogus"
 #define ENGINE_MAJOR 1
@@ -20,16 +19,16 @@ static const std::vector<const char *> RequiredValidationLayers = {
 static bool CheckInstanceExtensionSupport(
     std::unique_ptr<std::vector<const char *>> &required_extensions) {
 #ifndef NDEBUG
-  spdlog::debug("Required instance extensions:");
+  log::debug("Required instance extensions:");
   for (auto const &required : *required_extensions) {
-    spdlog::debug("   {}", required);
+    log::debug("   {}", required);
   }
 #endif // NDEBUG
 
   uint32_t extension_count;
   if ((vkEnumerateInstanceExtensionProperties(nullptr, &extension_count,
                                               nullptr) != VK_SUCCESS)) {
-    spdlog::error("Failed to query number of available instance extensions");
+    log::error("Failed to query number of available instance extensions");
     ;
     return false;
   }
@@ -37,15 +36,15 @@ static bool CheckInstanceExtensionSupport(
   if (vkEnumerateInstanceExtensionProperties(nullptr, &extension_count,
                                              available_extensions.data()) !=
       VK_SUCCESS) {
-    spdlog::error("Failed to query available instance extensions");
+    log::error("Failed to query available instance extensions");
     return false;
   }
 
 #ifndef NDEBUG
-  spdlog::debug("Available instance extensions:");
+  log::debug("Available instance extensions:");
   for (const auto &extension : available_extensions) {
     auto available = extension.extensionName;
-    spdlog::debug("   {}", available);
+    log::debug("   {}", available);
   }
 #endif
 
@@ -56,7 +55,7 @@ static bool CheckInstanceExtensionSupport(
               const std::string available(extension_property.extensionName);
               return required == available;
             })) {
-      spdlog::error("Required instance extension '{}' not available", required);
+      log::error("Required instance extension '{}' not available", required);
       return false;
     }
   }
@@ -67,27 +66,27 @@ static bool CheckInstanceExtensionSupport(
 #ifndef NDEBUG
 static bool
 CheckValidationLayerSupport(std::vector<const char *> required_layers) {
-  spdlog::debug("Required validation layers:");
+  log::debug("Required validation layers:");
   for (auto required : required_layers) {
-    spdlog::debug("   {}", required);
+    log::debug("   {}", required);
   }
 
   uint32_t layer_count;
   if (vkEnumerateInstanceLayerProperties(&layer_count, nullptr) != VK_SUCCESS) {
-    spdlog::error("Failed to query number of available validation layers");
+    log::error("Failed to query number of available validation layers");
     return false;
   }
   std::vector<VkLayerProperties> available_layers(layer_count);
   if (vkEnumerateInstanceLayerProperties(
           &layer_count, available_layers.data()) != VK_SUCCESS) {
-    spdlog::error("Failed to query available validation layers");
+    log::error("Failed to query available validation layers");
     return false;
   }
 
   spdlog::debug("Available validation layers:");
   for (const auto layer : available_layers) {
     auto available = layer.layerName;
-    spdlog::debug("   {}", available);
+    log::debug("   {}", available);
   }
 
   for (const std::string required : required_layers) {
@@ -96,8 +95,7 @@ CheckValidationLayerSupport(std::vector<const char *> required_layers) {
                        const std::string available(layer_property.layerName);
                        return required == available;
                      })) {
-      spdlog::error("Required validation layer '{}' is not available",
-                    required);
+      log::error("Required validation layer '{}' is not available", required);
       return false;
     }
   }
@@ -157,7 +155,7 @@ Instance::Instance(const std::string &name, int major, int minor, int patch,
   }
 
 #ifndef NDEBUG
-  spdlog::debug("Creating debug messenger");
+  log::debug("Creating debug messenger");
   m_debug_messenger = new DebugMessenger(m_instance);
 #else
   m_debug_messenger = nullptr;
@@ -165,7 +163,7 @@ Instance::Instance(const std::string &name, int major, int minor, int patch,
 }
 
 Instance::~Instance() {
-  spdlog::debug("Destroying debug messenger");
+  log::debug("Destroying debug messenger");
 
   delete m_debug_messenger;
   vkDestroyInstance(m_instance, nullptr);

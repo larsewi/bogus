@@ -6,5 +6,6 @@
 #define BOGUS_BOGUS_HPP
 
 #include "application.hpp"
+#include "logger.hpp"
 
 #endif // BOGUS_BOGUS_HPP

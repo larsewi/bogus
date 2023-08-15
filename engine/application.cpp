@@ -8,9 +8,8 @@
 #include <iostream>
 #include <vector>
 
-#include <spdlog/spdlog.h>
-
 #include "application.hpp"
+#include "logger.hpp"
 
 using namespace bogus;
 
@@ -23,21 +22,19 @@ Application::Application(const std::string &app_name, int app_major,
                          int app_minor, int app_patch,
                          const std::string &window_title, int window_width,
                          int window_height) {
-  spdlog::set_level(spdlog::level::debug);
-
-  spdlog::debug("Creating window");
+  log::debug("Creating window");
   m_window = new Window(window_title, window_width, window_height);
 
-  spdlog::debug("Creating instance");
+  log::debug("Creating instance");
   m_instance =
       new Instance(app_name, app_major, app_minor, app_patch, m_window);
 }
 
 Application::~Application() {
-  spdlog::debug("Destroying instance");
+  log::debug("Destroying instance");
   delete m_instance;
 
-  spdlog::debug("Destroying window");
+  log::debug("Destroying window");
   delete m_window;
 }
 
@@ -48,17 +45,17 @@ bool Application::Run() {
 
   while (!m_window->ShouldClose()) {
     if (!Events()) {
-      spdlog::error("Failed to handle events");
+      log::error("Failed to handle events");
       return false;
     }
 
     if (!Update()) {
-      spdlog::error("Failed to update");
+      log::error("Failed to update");
       return false;
     }
 
     if (!Render()) {
-      spdlog::error("Failed to render");
+      log::error("Failed to render");
       return false;
     }
   }
@@ -72,7 +69,7 @@ bool Application::Run() {
 
 bool Application::Events() {
   if (!m_window->Events()) {
-    spdlog::error("Failed to handle window events");
+    log::error("Failed to handle window events");
     return false;
   }
 
@@ -85,7 +82,7 @@ bool Application::Events() {
 
 bool Application::Update() {
   if (!m_window->Update()) {
-    spdlog::error("Failed to handle window updates");
+    log::error("Failed to handle window updates");
     return false;
   }
 
@@ -98,7 +95,7 @@ bool Application::Update() {
 
 bool Application::Render() {
   if (!m_window->Render()) {
-    spdlog::error("Failed to render window");
+    log::error("Failed to render window");
     return false;
   }
 
