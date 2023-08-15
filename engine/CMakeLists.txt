@@ -10,7 +10,17 @@ find_package(Vulkan REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(glm REQUIRED)
 
-target_link_libraries(bogus Vulkan::Vulkan glfw glm::glm pthread X11 Xxf86vm Xrandr Xi)
+target_link_libraries(bogus PRIVATE
+        Vulkan::Vulkan
+        glfw
+        glm::glm
+        pthread
+        spdlog
+        fmt
+        X11
+        Xxf86vm
+        Xrandr
+        Xi)
 
 target_include_directories(bogus PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 

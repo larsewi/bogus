@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include <spdlog/spdlog.h>
+
 #include "debug_messenger.hpp"
 
 using namespace bogus;
@@ -10,7 +12,7 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debug_messenger_callback(
     const VkDebugUtilsMessengerCallbackDataEXT *callback_data,
     void *pUserData) {
 
-  std::cerr << "validation layer: " << callback_data->pMessage << std::endl;
+  spdlog::info(callback_data->pMessage);
 
   return VK_FALSE;
 }
