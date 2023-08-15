@@ -25,19 +25,19 @@ Application::Application(const std::string &app_name, int app_major,
                          int window_height) {
   spdlog::set_level(spdlog::level::debug);
 
-  spdlog::info("Creating window");
+  spdlog::debug("Creating window");
   m_window = new Window(window_title, window_width, window_height);
 
-  spdlog::info("Creating instance");
+  spdlog::debug("Creating instance");
   m_instance =
       new Instance(app_name, app_major, app_minor, app_patch, m_window);
 }
 
 Application::~Application() {
-  spdlog::info("Destroying instance");
+  spdlog::debug("Destroying instance");
   delete m_instance;
 
-  spdlog::info("Destroying window");
+  spdlog::debug("Destroying window");
   delete m_window;
 }
 

@@ -157,6 +157,7 @@ Instance::Instance(const std::string &name, int major, int minor, int patch,
   }
 
 #ifndef NDEBUG
+  spdlog::debug("Creating debug messenger");
   m_debug_messenger = new DebugMessenger(m_instance);
 #else
   m_debug_messenger = nullptr;
@@ -164,6 +165,8 @@ Instance::Instance(const std::string &name, int major, int minor, int patch,
 }
 
 Instance::~Instance() {
+  spdlog::debug("Destroying debug messenger");
+
   delete m_debug_messenger;
   vkDestroyInstance(m_instance, nullptr);
 }
