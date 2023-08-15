@@ -11,7 +11,26 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debug_messenger_callback(
     const VkDebugUtilsMessengerCallbackDataEXT *callback_data,
     void *pUserData) {
 
-  log::info(callback_data->pMessage);
+  switch (message_severity) {
+  case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
+    log::debug(callback_data->pMessage);
+    break;
+
+  case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
+    log::warn(callback_data->pMessage);
+    break;
+
+  case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
+    log::info(callback_data->pMessage);
+    break;
+
+  case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
+    log::debug(callback_data->pMessage);
+    break;
+
+  default:
+    throw DebugMessengerException("Unexpected message severity bit");
+  }
 
   return VK_FALSE;
 }
