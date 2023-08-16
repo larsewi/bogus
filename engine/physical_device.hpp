@@ -8,6 +8,10 @@
 
 namespace bogus {
 
+struct QueueFamilyIndices {
+  std::optional<uint32_t> graphics_family;
+};
+
 class PhysicalDeviceException : public std::exception {
 public:
   PhysicalDeviceException(const std::string &message) : m_message(message) {}

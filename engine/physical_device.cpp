@@ -6,10 +6,6 @@
 
 using namespace bogus;
 
-struct QueueFamilyIndices {
-  std::optional<uint32_t> graphics_family;
-};
-
 static QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device) {
   QueueFamilyIndices indices;
 
