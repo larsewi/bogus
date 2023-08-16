@@ -9,6 +9,7 @@
 
 #include "debug_messenger.hpp"
 #include "object.hpp"
+#include "physical_device.hpp"
 #include "window.hpp"
 
 namespace bogus {
@@ -39,6 +40,7 @@ private:
   const int m_patch;
   VkInstance m_instance;
   DebugMessenger *m_debug_messenger;
+  PhysicalDevice *m_physical_device;
 };
 
 } // namespace bogus

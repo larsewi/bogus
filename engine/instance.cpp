@@ -160,12 +160,18 @@ Instance::Instance(const std::string &name, int major, int minor, int patch,
 #else
   m_debug_messenger = nullptr;
 #endif
+
+  log::debug("Creating physical device");
+  m_physical_device = new PhysicalDevice(m_instance);
 }
 
 Instance::~Instance() {
-  log::debug("Destroying debug messenger");
+  log::debug("Destroying physical device");
+  delete m_physical_device;
 
+  log::debug("Destroying debug messenger");
   delete m_debug_messenger;
+
   vkDestroyInstance(m_instance, nullptr);
 }
 
