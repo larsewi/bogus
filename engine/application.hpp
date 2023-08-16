@@ -42,7 +42,9 @@ protected:
 private:
   Window *m_window;
   Instance *m_instance;
+#ifndef NDEBUG
   DebugMessenger *m_debug_messenger;
+#endif
   PhysicalDevice *m_physical_device;
   LogicalDevice *m_logical_device;
 

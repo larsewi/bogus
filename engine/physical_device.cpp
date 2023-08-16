@@ -40,12 +40,12 @@ static bool IsPhysicalDeviceSuitable(VkPhysicalDevice device) {
   QueueFamilyIndices indices = FindQueueFamilies(device);
 
   if (!indices.graphics_family.has_value()) {
-    log::debug("Device {} not suitable: missing graphics queue family",
+    log::debug("   Device {} not suitable: missing graphics queue family",
                properties.deviceName);
     return false;
   }
 
-  log::debug("Found suitable physical device {}", properties.deviceName);
+  log::debug("   Found suitable physical device {}", properties.deviceName);
   return true;
 }
 

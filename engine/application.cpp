@@ -35,8 +35,6 @@ Application::Application(const std::string &app_name, int app_major,
 #ifndef NDEBUG
   log::info("Creating debug messenger");
   m_debug_messenger = new DebugMessenger(*m_instance);
-#else
-  m_debug_messenger = nullptr;
 #endif
 
   log::info("Creating physical device");
@@ -53,8 +51,10 @@ Application::~Application() {
   log::info("Destroying physical device");
   delete m_physical_device;
 
+#ifndef NDEBUG
   log::info("Destroying debug messenger");
   delete m_debug_messenger;
+#endif
 
   log::info("Destroying instance");
   delete m_instance;
