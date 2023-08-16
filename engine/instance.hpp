@@ -12,10 +12,6 @@
 
 namespace bogus {
 
-class DebugMessenger;
-class PhysicalDevice;
-class LogicalDevice;
-
 class InstanceException : public std::exception {
 public:
   InstanceException(const std::string &message) : m_message(message) {}
@@ -42,9 +38,9 @@ private:
   const int m_patch;
   VkInstance m_instance;
 
-  friend DebugMessenger;
-  friend PhysicalDevice;
-  friend LogicalDevice;
+  friend class DebugMessenger;
+  friend class PhysicalDevice;
+  friend class LogicalDevice;
 };
 
 } // namespace bogus

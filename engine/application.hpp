@@ -9,8 +9,11 @@
 #include <memory>
 #include <string>
 
+#include "debug_messenger.hpp"
 #include "instance.hpp"
+#include "logical_device.hpp"
 #include "object.hpp"
+#include "physical_device.hpp"
 #include "window.hpp"
 
 namespace bogus {
