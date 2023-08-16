@@ -24,7 +24,7 @@ public:
   static VkDebugUtilsMessengerCreateInfoEXT GetCreateInfo();
 
 private:
-  Instance *m_instance;
+  Instance &m_instance;
   VkDebugUtilsMessengerEXT m_debug_messenger;
 };
 
