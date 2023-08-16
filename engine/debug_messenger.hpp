@@ -2,6 +2,7 @@
 #define BOGUS_DEBUG_MESSENGER_HPP
 
 #include <vulkan/vulkan.h>
+#include <stdexcept>
 
 namespace bogus {
 
@@ -16,7 +17,7 @@ private:
 
 class DebugMessenger {
 public:
-  DebugMessenger(VkInstance &m_instance);
+  DebugMessenger(VkInstance &instance);
   ~DebugMessenger();
   static VkDebugUtilsMessengerCreateInfoEXT GetCreateInfo();
 
