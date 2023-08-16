@@ -36,7 +36,7 @@ static bool CheckInstanceExtensionSupport(
   if (vkEnumerateInstanceExtensionProperties(nullptr, &extension_count,
                                              available_extensions.data()) !=
       VK_SUCCESS) {
-    log::error("Failed to query available instance extensions");
+    log::error("Failed to enumerate available instance extensions");
     return false;
   }
 
@@ -79,7 +79,7 @@ CheckValidationLayerSupport(std::vector<const char *> required_layers) {
   std::vector<VkLayerProperties> available_layers(layer_count);
   if (vkEnumerateInstanceLayerProperties(
           &layer_count, available_layers.data()) != VK_SUCCESS) {
-    log::error("Failed to query available validation layers");
+    log::error("Failed to enumerate available validation layers");
     return false;
   }
 

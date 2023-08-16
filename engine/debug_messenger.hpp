@@ -1,8 +1,8 @@
 #ifndef BOGUS_DEBUG_MESSENGER_HPP
 #define BOGUS_DEBUG_MESSENGER_HPP
 
-#include <vulkan/vulkan.h>
 #include <stdexcept>
+#include <vulkan/vulkan.h>
 
 namespace bogus {
 
