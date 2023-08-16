@@ -57,16 +57,17 @@ DestroyDebugUtilsMessengerEXT(VkInstance instance,
   }
 }
 
-DebugMessenger::DebugMessenger(VkInstance &instance) : m_instance(instance) {
+DebugMessenger::DebugMessenger(Instance &instance) : m_instance(&instance) {
   VkDebugUtilsMessengerCreateInfoEXT create_info = GetCreateInfo();
-  if (CreateDebugUtilsMessengerEXT(m_instance, &create_info, nullptr,
-                                   &m_debug_messenger) != VK_SUCCESS) {
+  if (CreateDebugUtilsMessengerEXT(m_instance->m_instance, &create_info,
+                                   nullptr, &m_debug_messenger) != VK_SUCCESS) {
     throw DebugMessengerException("Failed to create debug utils messenger");
   }
 }
 
 DebugMessenger::~DebugMessenger() {
-  DestroyDebugUtilsMessengerEXT(m_instance, m_debug_messenger, nullptr);
+  DestroyDebugUtilsMessengerEXT(m_instance->m_instance, m_debug_messenger,
+                                nullptr);
 }
 
 VkDebugUtilsMessengerCreateInfoEXT DebugMessenger::GetCreateInfo() {

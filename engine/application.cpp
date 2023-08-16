@@ -9,7 +9,10 @@
 #include <vector>
 
 #include "application.hpp"
+#include "debug_messenger.hpp"
 #include "logger.hpp"
+#include "logical_device.hpp"
+#include "physical_device.hpp"
 
 using namespace bogus;
 
@@ -22,19 +25,41 @@ Application::Application(const std::string &app_name, int app_major,
                          int app_minor, int app_patch,
                          const std::string &window_title, int window_width,
                          int window_height) {
-  log::debug("Creating window");
+  log::info("Creating window");
   m_window = new Window(window_title, window_width, window_height);
 
-  log::debug("Creating instance");
+  log::info("Creating instance");
   m_instance =
       new Instance(app_name, app_major, app_minor, app_patch, m_window);
+
+#ifndef NDEBUG
+  log::info("Creating debug messenger");
+  m_debug_messenger = new DebugMessenger(*m_instance);
+#else
+  m_debug_messenger = nullptr;
+#endif
+
+  log::info("Creating physical device");
+  m_physical_device = new PhysicalDevice(*m_instance);
+
+  log::info("Creating logical device");
+  m_logical_device = new LogicalDevice(*m_instance);
 }
 
 Application::~Application() {
-  log::debug("Destroying instance");
+  log::info("Destroying logical device");
+  delete m_logical_device;
+
+  log::info("Destroying physical device");
+  delete m_physical_device;
+
+  log::info("Destroying debug messenger");
+  delete m_debug_messenger;
+
+  log::info("Destroying instance");
   delete m_instance;
 
-  log::debug("Destroying window");
+  log::info("Destroying window");
   delete m_window;
 }
 

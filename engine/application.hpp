@@ -42,6 +42,9 @@ protected:
 private:
   Window *m_window;
   Instance *m_instance;
+  DebugMessenger *m_debug_messenger;
+  PhysicalDevice *m_physical_device;
+  LogicalDevice *m_logical_device;
 
   bool Events() override;
   bool Update() override;

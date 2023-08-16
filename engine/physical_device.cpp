@@ -45,14 +45,13 @@ static bool IsPhysicalDeviceSuitable(VkPhysicalDevice device) {
     return false;
   }
 
-  log::info("Found suitable physical device {}", properties.deviceName);
+  log::debug("Found suitable physical device {}", properties.deviceName);
   return true;
 }
 
-PhysicalDevice::PhysicalDevice(VkInstance &instance)
-    : m_physical_device(VK_NULL_HANDLE) {
+PhysicalDevice::PhysicalDevice(Instance &instance) : m_device(VK_NULL_HANDLE) {
   uint32_t device_count;
-  if (vkEnumeratePhysicalDevices(instance, &device_count, nullptr) !=
+  if (vkEnumeratePhysicalDevices(instance.m_instance, &device_count, nullptr) !=
       VK_SUCCESS) {
     throw PhysicalDeviceException("Failed to query number of physical devices");
   }
@@ -63,8 +62,8 @@ PhysicalDevice::PhysicalDevice(VkInstance &instance)
   }
 
   std::vector<VkPhysicalDevice> devices(device_count);
-  if (vkEnumeratePhysicalDevices(instance, &device_count, devices.data()) !=
-      VK_SUCCESS) {
+  if (vkEnumeratePhysicalDevices(instance.m_instance, &device_count,
+                                 devices.data()) != VK_SUCCESS) {
     throw PhysicalDeviceException("Failed to enumerate physical devices");
   }
 
@@ -77,12 +76,12 @@ PhysicalDevice::PhysicalDevice(VkInstance &instance)
     vkGetPhysicalDeviceFeatures(device, &features);
 
     if (IsPhysicalDeviceSuitable(device)) {
-      m_physical_device = device;
+      m_device = device;
       break;
     }
   }
 
-  if (m_physical_device == VK_NULL_HANDLE) {
+  if (m_device == VK_NULL_HANDLE) {
     throw PhysicalDeviceException("Failed to find a suitable physical device");
   }
 }

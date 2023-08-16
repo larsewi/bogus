@@ -4,6 +4,8 @@
 #include <stdexcept>
 #include <vulkan/vulkan.h>
 
+#include "instance.hpp"
+
 namespace bogus {
 
 class DebugMessengerException : public std::exception {
@@ -17,12 +19,12 @@ private:
 
 class DebugMessenger {
 public:
-  DebugMessenger(VkInstance &instance);
+  DebugMessenger(Instance &instance);
   ~DebugMessenger();
   static VkDebugUtilsMessengerCreateInfoEXT GetCreateInfo();
 
 private:
-  VkInstance m_instance;
+  Instance *m_instance;
   VkDebugUtilsMessengerEXT m_debug_messenger;
 };
 

@@ -4,6 +4,8 @@
 #include <stdexcept>
 #include <vulkan/vulkan.h>
 
+#include "instance.hpp"
+
 namespace bogus {
 
 class PhysicalDeviceException : public std::exception {
@@ -17,10 +19,10 @@ private:
 
 class PhysicalDevice {
 public:
-  PhysicalDevice(VkInstance &instance);
+  PhysicalDevice(Instance &instance);
 
 private:
-  VkPhysicalDevice m_physical_device;
+  VkPhysicalDevice m_device;
 };
 
 } // namespace bogus

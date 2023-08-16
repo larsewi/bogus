@@ -7,12 +7,14 @@
 #include <stdexcept>
 #include <vector>
 
-#include "debug_messenger.hpp"
 #include "object.hpp"
-#include "physical_device.hpp"
 #include "window.hpp"
 
 namespace bogus {
+
+class DebugMessenger;
+class PhysicalDevice;
+class LogicalDevice;
 
 class InstanceException : public std::exception {
 public:
@@ -39,8 +41,10 @@ private:
   const int m_minor;
   const int m_patch;
   VkInstance m_instance;
-  DebugMessenger *m_debug_messenger;
-  PhysicalDevice *m_physical_device;
+
+  friend DebugMessenger;
+  friend PhysicalDevice;
+  friend LogicalDevice;
 };
 
 } // namespace bogus

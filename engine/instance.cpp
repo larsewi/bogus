@@ -1,5 +1,7 @@
 #include <iostream>
+#include <optional>
 
+#include "debug_messenger.hpp"
 #include "instance.hpp"
 #include "logger.hpp"
 
@@ -153,27 +155,9 @@ Instance::Instance(const std::string &name, int major, int minor, int patch,
   if (result != VK_SUCCESS) {
     throw InstanceException("Failed to create vulkan instance");
   }
-
-#ifndef NDEBUG
-  log::debug("Creating debug messenger");
-  m_debug_messenger = new DebugMessenger(m_instance);
-#else
-  m_debug_messenger = nullptr;
-#endif
-
-  log::debug("Creating physical device");
-  m_physical_device = new PhysicalDevice(m_instance);
 }
 
-Instance::~Instance() {
-  log::debug("Destroying physical device");
-  delete m_physical_device;
-
-  log::debug("Destroying debug messenger");
-  delete m_debug_messenger;
-
-  vkDestroyInstance(m_instance, nullptr);
-}
+Instance::~Instance() { vkDestroyInstance(m_instance, nullptr); }
 
 bool Instance::Events() { return true; }
 
