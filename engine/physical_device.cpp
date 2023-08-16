@@ -1,4 +1,3 @@
-#include <optional>
 #include <vector>
 
 #include "logger.hpp"
@@ -80,4 +79,8 @@ PhysicalDevice::PhysicalDevice(Instance &instance) : m_device(VK_NULL_HANDLE) {
   if (m_device == VK_NULL_HANDLE) {
     throw PhysicalDeviceException("Failed to find a suitable physical device");
   }
+}
+
+QueueFamilyIndices PhysicalDevice::GetQueueFamilyIndices() const {
+  return FindQueueFamilies(m_device);
 }

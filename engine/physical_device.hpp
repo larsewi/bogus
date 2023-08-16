@@ -1,6 +1,7 @@
 #ifndef BOGUS_PHYSICAL_DEVICE_HPP
 #define BOGUS_PHYSICAL_DEVICE_HPP
 
+#include <optional>
 #include <stdexcept>
 #include <vulkan/vulkan.h>
 
@@ -24,6 +25,7 @@ private:
 class PhysicalDevice {
 public:
   PhysicalDevice(Instance &instance);
+  QueueFamilyIndices GetQueueFamilyIndices() const;
 
 private:
   VkPhysicalDevice m_device;
