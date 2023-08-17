@@ -25,10 +25,13 @@ private:
 class PhysicalDevice {
 public:
   PhysicalDevice(Instance &instance);
-  QueueFamilyIndices GetQueueFamilyIndices() const;
+  VkDeviceQueueCreateInfo GetDeviceQueueCreateInfo() const;
+  VkPhysicalDeviceFeatures GetPhysicalDeviceFeatures() const;
 
 private:
   VkPhysicalDevice m_device;
+
+  friend class LogicalDevice;
 };
 
 } // namespace bogus

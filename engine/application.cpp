@@ -41,7 +41,7 @@ Application::Application(const std::string &app_name, int app_major,
   m_physical_device = new PhysicalDevice(*m_instance);
 
   log::info("Creating logical device");
-  m_logical_device = new LogicalDevice(*m_instance);
+  m_logical_device = new LogicalDevice(*m_instance, *m_physical_device);
 }
 
 Application::~Application() {

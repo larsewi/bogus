@@ -81,6 +81,20 @@ PhysicalDevice::PhysicalDevice(Instance &instance) : m_device(VK_NULL_HANDLE) {
   }
 }
 
-QueueFamilyIndices PhysicalDevice::GetQueueFamilyIndices() const {
-  return FindQueueFamilies(m_device);
+VkDeviceQueueCreateInfo PhysicalDevice::GetDeviceQueueCreateInfo() const {
+  QueueFamilyIndices indices = FindQueueFamilies(m_device);
+
+  VkDeviceQueueCreateInfo create_info{};
+  create_info.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+  create_info.queueFamilyIndex = indices.graphics_family.value();
+  create_info.queueCount = 1;
+  float queue_priority = 1.0f;
+  create_info.pQueuePriorities = &queue_priority;
+
+  return create_info;
+}
+
+VkPhysicalDeviceFeatures PhysicalDevice::GetPhysicalDeviceFeatures() const {
+  VkPhysicalDeviceFeatures features{};
+  return features;
 }

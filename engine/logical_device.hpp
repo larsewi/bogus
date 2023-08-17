@@ -5,6 +5,7 @@
 #include <vulkan/vulkan.h>
 
 #include "instance.hpp"
+#include "physical_device.hpp"
 
 namespace bogus {
 
@@ -19,7 +20,8 @@ private:
 
 class LogicalDevice {
 public:
-  LogicalDevice(Instance &instance);
+  LogicalDevice(Instance &instance, PhysicalDevice &physical_device);
+  ~LogicalDevice();
 
 private:
   VkDevice m_device;

@@ -13,7 +13,7 @@
 using namespace bogus;
 
 #ifndef NDEBUG
-static const std::vector<const char *> RequiredValidationLayers = {
+const std::vector<const char *> Instance::required_validation_layers = {
     "VK_LAYER_KHRONOS_validation",
 };
 #endif
@@ -137,11 +137,11 @@ Instance::Instance(const std::string &name, int major, int minor, int patch,
   create_info.ppEnabledExtensionNames = required_extensions->data();
 
 #ifndef NDEBUG
-  if (!CheckValidationLayerSupport(RequiredValidationLayers)) {
+  if (!CheckValidationLayerSupport(required_validation_layers)) {
     throw InstanceException("Unsupported required validation layer");
   }
-  create_info.enabledLayerCount = RequiredValidationLayers.size();
-  create_info.ppEnabledLayerNames = RequiredValidationLayers.data();
+  create_info.enabledLayerCount = required_validation_layers.size();
+  create_info.ppEnabledLayerNames = required_validation_layers.data();
 
   // This debug messenger is only used during instance create and destroy
   VkDebugUtilsMessengerCreateInfoEXT debug_create_info =
