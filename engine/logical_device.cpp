@@ -20,6 +20,9 @@ LogicalDevice::LogicalDevice(Instance &instance,
                      &m_device) != VK_SUCCESS) {
     throw LogicalDeviceException("Failed to create logical device");
   }
+
+  vkGetDeviceQueue(m_device, queue_create_info.queueFamilyIndex, 0,
+                   &m_graphics_queue);
 }
 
 LogicalDevice::~LogicalDevice() { vkDestroyDevice(m_device, nullptr); }

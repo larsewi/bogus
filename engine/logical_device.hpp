@@ -25,6 +25,7 @@ public:
 
 private:
   VkDevice m_device;
+  VkQueue m_graphics_queue;
 };
 
 } // namespace bogus
