@@ -28,6 +28,9 @@ public:
 private:
   VkSurfaceKHR m_surface;
   Instance &m_instance;
+
+  friend class PhysicalDevice;
+  friend class Device;
 };
 
 } // namespace bogus

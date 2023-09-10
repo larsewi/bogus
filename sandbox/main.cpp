@@ -16,7 +16,7 @@
 #define WINDOW_HEIGHT 480
 
 int main() {
-  bogus::log::set_level(bogus::log::level::debug);
+  bogus::log::set_level(bogus::log::level::info);
   auto app = Sandbox(APP_NAME, APP_MAJOR, APP_MINOR, APP_PATCH, WINDOW_TITLE,
                      WINDOW_WIDTH, WINDOW_HEIGHT);
   if (!app.Run()) {

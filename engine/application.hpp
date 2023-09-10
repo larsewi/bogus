@@ -10,10 +10,9 @@
 #include <string>
 
 #include "debug_messenger.hpp"
+#include "device.hpp"
 #include "instance.hpp"
-#include "logical_device.hpp"
 #include "object.hpp"
-#include "physical_device.hpp"
 #include "surface.hpp"
 #include "window.hpp"
 
@@ -50,8 +49,7 @@ private:
   DebugMessenger *m_debug_messenger;
 #endif
   Surface *m_surface;
-  PhysicalDevice *m_physical_device;
-  LogicalDevice *m_logical_device;
+  Device *m_device;
 
   bool Events() override;
   bool Update() override;

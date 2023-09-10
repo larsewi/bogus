@@ -43,8 +43,7 @@ private:
 
   friend class DebugMessenger;
   friend class Surface;
-  friend class PhysicalDevice;
-  friend class LogicalDevice;
+  friend class Device;
 };
 
 } // namespace bogus

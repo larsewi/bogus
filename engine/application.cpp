@@ -11,8 +11,6 @@
 #include "application.hpp"
 #include "debug_messenger.hpp"
 #include "logger.hpp"
-#include "logical_device.hpp"
-#include "physical_device.hpp"
 
 using namespace bogus;
 
@@ -40,19 +38,13 @@ Application::Application(const std::string &app_name, int app_major,
   log::info("Creating window surface");
   m_surface = new Surface(*m_instance, *m_window);
 
-  log::info("Creating physical device");
-  m_physical_device = new PhysicalDevice(*m_instance);
-
-  log::info("Creating logical device");
-  m_logical_device = new LogicalDevice(*m_instance, *m_physical_device);
+  log::info("Creating device");
+  m_device = new Device(*m_instance, *m_surface);
 }
 
 Application::~Application() {
-  log::info("Destroying logical device");
-  delete m_logical_device;
-
-  log::info("Destroying physical device");
-  delete m_physical_device;
+  log::info("Destroying device");
+  delete m_device;
 
   log::info("Destroying window surface");
   delete m_surface;

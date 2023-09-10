@@ -5,8 +5,7 @@ add_library(bogus
         instance.cpp
         debug_messenger.cpp
         surface.cpp
-        physical_device.cpp
-        logical_device.cpp)
+        device.cpp)
 
 find_package(Vulkan REQUIRED)
 find_package(glfw3 REQUIRED)
