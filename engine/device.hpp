@@ -30,7 +30,7 @@ private:
   VkPhysicalDevice m_physical_device;
   VkDevice m_logical_device;
   VkQueue m_graphics_queue;
-  VkQueue m_present_queue;
+  VkQueue m_presentation_queue;
 };
 
 } // namespace bogus

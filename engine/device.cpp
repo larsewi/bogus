@@ -9,7 +9,7 @@ using namespace bogus;
 
 struct QueueFamilyIndices {
   std::optional<uint32_t> graphics_family;
-  std::optional<uint32_t> present_family;
+  std::optional<uint32_t> presentation_family;
 };
 
 static QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device,
@@ -32,7 +32,7 @@ static QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device,
     VkBool32 present_support = false;
     vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &present_support);
     if (present_support) {
-      indices.present_family = i;
+      indices.presentation_family = i;
     }
   }
 
@@ -53,7 +53,7 @@ static bool IsPhysicalDeviceSuitable(VkPhysicalDevice device,
     return false;
   }
 
-  if (!indices.present_family.has_value()) {
+  if (!indices.presentation_family.has_value()) {
     log::debug("   Device {} not suitable: missing present queue family",
                properties.deviceName);
     return false;
@@ -104,8 +104,8 @@ Device::Device(Instance &instance, Surface &surface)
     throw DeviceException("Failed to find a suitable physical device");
   }
 
-  std::set<uint32_t> uniqueue_queue_families = {indices.graphics_family.value(),
-                                                indices.present_family.value()};
+  std::set<uint32_t> uniqueue_queue_families = {
+      indices.graphics_family.value(), indices.presentation_family.value()};
 
   std::vector<VkDeviceQueueCreateInfo> queue_create_infos;
   float queue_priority = 1.0f;
@@ -134,8 +134,8 @@ Device::Device(Instance &instance, Surface &surface)
 
   vkGetDeviceQueue(m_logical_device, indices.graphics_family.value(), 0,
                    &m_graphics_queue);
-  vkGetDeviceQueue(m_logical_device, indices.present_family.value(), 0,
-                   &m_present_queue);
+  vkGetDeviceQueue(m_logical_device, indices.presentation_family.value(), 0,
+                   &m_presentation_queue);
 }
 
 Device::~Device() { vkDestroyDevice(m_logical_device, nullptr); }
