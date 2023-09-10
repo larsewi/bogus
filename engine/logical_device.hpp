@@ -15,7 +15,7 @@ public:
   virtual const char *what() const throw() { return m_message.c_str(); }
 
 private:
-  std::string m_message;
+  const std::string m_message;
 };
 
 class LogicalDevice {

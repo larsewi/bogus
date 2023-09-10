@@ -37,6 +37,9 @@ Application::Application(const std::string &app_name, int app_major,
   m_debug_messenger = new DebugMessenger(*m_instance);
 #endif
 
+  log::info("Creating surface");
+  m_surface = new Surface();
+
   log::info("Creating physical device");
   m_physical_device = new PhysicalDevice(*m_instance);
 
@@ -50,6 +53,9 @@ Application::~Application() {
 
   log::info("Destroying physical device");
   delete m_physical_device;
+
+  log::info("Destroying surface");
+  delete m_surface;
 
 #ifndef NDEBUG
   log::info("Destroying debug messenger");

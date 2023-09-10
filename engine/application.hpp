@@ -14,6 +14,7 @@
 #include "logical_device.hpp"
 #include "object.hpp"
 #include "physical_device.hpp"
+#include "surface.hpp"
 #include "window.hpp"
 
 namespace bogus {
@@ -48,6 +49,7 @@ private:
 #ifndef NDEBUG
   DebugMessenger *m_debug_messenger;
 #endif
+  Surface *m_surface;
   PhysicalDevice *m_physical_device;
   LogicalDevice *m_logical_device;
 
