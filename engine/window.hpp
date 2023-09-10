@@ -1,3 +1,14 @@
+/**
+ * @file window.hpp
+ * @author Lars Erik Wik
+ * @brief The windows to render images on.
+ * @version 0.1
+ * @date 2023-09-10
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+
 #ifndef BOGUS_WINDOW_HPP
 #define BOGUS_WINDOW_HPP
 

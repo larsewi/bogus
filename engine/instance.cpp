@@ -13,7 +13,7 @@
 using namespace bogus;
 
 #ifndef NDEBUG
-const std::vector<const char *> Instance::required_validation_layers = {
+static const std::vector<const char *> required_validation_layers = {
     "VK_LAYER_KHRONOS_validation",
 };
 #endif
@@ -27,6 +27,7 @@ static bool CheckInstanceExtensionSupport(
   }
 #endif // NDEBUG
 
+  log::debug("Querying number of available instance extensions");
   uint32_t extension_count;
   if ((vkEnumerateInstanceExtensionProperties(nullptr, &extension_count,
                                               nullptr) != VK_SUCCESS)) {
@@ -34,6 +35,8 @@ static bool CheckInstanceExtensionSupport(
     ;
     return false;
   }
+
+  log::debug("Enumerating number of available instance extenstions");
   std::vector<VkExtensionProperties> available_extensions(extension_count);
   if (vkEnumerateInstanceExtensionProperties(nullptr, &extension_count,
                                              available_extensions.data()) !=

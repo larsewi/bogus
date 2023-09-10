@@ -37,9 +37,6 @@ private:
   const int m_minor;
   const int m_patch;
   VkInstance m_instance;
-#ifndef NDEBUG
-  static const std::vector<const char *> required_validation_layers;
-#endif
 
   friend class DebugMessenger;
   friend class Surface;

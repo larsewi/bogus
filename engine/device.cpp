@@ -7,10 +7,52 @@
 
 using namespace bogus;
 
+static const std::vector<const char *> required_extensions = {
+    VK_KHR_SWAPCHAIN_EXTENSION_NAME};
+
 struct QueueFamilyIndices {
   std::optional<uint32_t> graphics_family;
   std::optional<uint32_t> presentation_family;
 };
+
+static bool CheckDeviceExtensionSupport(VkPhysicalDevice device) {
+#ifndef NDEBUG
+  log::debug("Required device extensions:");
+  for (auto const &required : required_extensions) {
+    log::debug("   {}", required);
+  }
+#endif // NDEBUG
+
+  log::debug("Querying number of available device extenstions");
+  uint32_t count;
+  if (vkEnumerateDeviceExtensionProperties(device, nullptr, &count, nullptr) !=
+      VK_SUCCESS) {
+    log::error("Failed to query number of available device extensions");
+    return false;
+  }
+
+  log::debug("Enumerating available device extenstions");
+  std::vector<VkExtensionProperties> available_extensions(count);
+  if (vkEnumerateDeviceExtensionProperties(
+          device, nullptr, &count, available_extensions.data()) != VK_SUCCESS) {
+    log::error("Failed to enumerate available device extenstions");
+    return false;
+  }
+
+  for (const std::string &required : required_extensions) {
+    if (!std::any_of(
+            available_extensions.begin(), available_extensions.end(),
+            [&required](const VkExtensionProperties &extension_property) {
+              const std::string available(extension_property.extensionName);
+              return required == available;
+            })) {
+      log::error("Required device extension '{}' not available", required);
+      return false;
+    }
+  }
+
+  return true;
+}
 
 static QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device,
                                             VkSurfaceKHR surface) {
@@ -55,6 +97,12 @@ static bool IsPhysicalDeviceSuitable(VkPhysicalDevice device,
 
   if (!indices.presentation_family.has_value()) {
     log::debug("   Device {} not suitable: missing present queue family",
+               properties.deviceName);
+    return false;
+  }
+
+  if (!CheckDeviceExtensionSupport(device)) {
+    log::debug("   Device {} not suitable: missing required extenstion support",
                properties.deviceName);
     return false;
   }

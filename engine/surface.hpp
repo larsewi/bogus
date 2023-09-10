@@ -1,3 +1,14 @@
+/**
+ * @file surface.hpp
+ * @author Lars Erik Wik
+ * @brief An abstract type of surface to present rendered images to.
+ * @version 0.1
+ * @date 2023-09-10
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+
 #ifndef BOGUS_SURFACE_HPP
 #define BOGUS_SURFACE_HPP
 
