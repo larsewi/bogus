@@ -23,6 +23,7 @@ private:
 class Window : public Object {
 public:
   Window(const std::string &title, int width, int height);
+  ~Window();
   std::unique_ptr<std::vector<const char *>> GetExtensions() const;
   bool ShouldClose() const;
   bool Events() override;
@@ -33,8 +34,10 @@ private:
   const std::string m_title;
   int m_width;
   int m_height;
-  std::unique_ptr<GLFWwindow, void (*)(GLFWwindow *)> m_window;
+  GLFWwindow *m_window;
   bool m_should_close;
+
+  friend class Surface;
 };
 
 } // namespace bogus

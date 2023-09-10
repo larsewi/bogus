@@ -8,8 +8,8 @@
 using namespace bogus;
 
 Window::Window(const std::string &title, int width, int height)
-    : m_title(title), m_width(width), m_height(height),
-      m_window(nullptr, nullptr), m_should_close(false) {
+    : m_title(title), m_width(width), m_height(height), m_window(nullptr),
+      m_should_close(false) {
   log::debug("Initializing GLFW");
   if (glfwInit() == GLFW_FALSE) {
     throw WindowException("Failed to initialize GLFW");
@@ -19,13 +19,17 @@ Window::Window(const std::string &title, int width, int height)
   glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // Resizing windows not supported
 
   log::debug("Creating GLFW window");
-  m_window = std::unique_ptr<GLFWwindow, void (*)(GLFWwindow *)>(
-      glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr),
-      &glfwDestroyWindow);
+  m_window =
+      glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
 
   if (!m_window) {
     throw WindowException("Failed to create GLFW window");
   }
+}
+
+Window::~Window() {
+  log::debug("Destroying GLFW window");
+  glfwDestroyWindow(m_window);
 }
 
 bool Window::Events() {
@@ -34,7 +38,7 @@ bool Window::Events() {
 }
 
 bool Window::Update() {
-  m_should_close = glfwWindowShouldClose(m_window.get());
+  m_should_close = glfwWindowShouldClose(m_window);
   return true;
 }
 

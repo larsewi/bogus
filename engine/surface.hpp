@@ -5,7 +5,9 @@
 
 #include <stdexcept>
 
+#include "instance.hpp"
 #include "object.hpp"
+#include "window.hpp"
 
 namespace bogus {
 
@@ -20,11 +22,12 @@ private:
 
 class Surface {
 public:
-  Surface();
+  Surface(Instance &instance, Window &window);
   ~Surface();
 
 private:
-  VkSurfaceKHR surface;
+  VkSurfaceKHR m_surface;
+  Instance &m_instance;
 };
 
 } // namespace bogus
