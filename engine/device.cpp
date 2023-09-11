@@ -137,7 +137,8 @@ static QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device,
 }
 
 static bool IsPhysicalDeviceSuitable(VkPhysicalDevice device,
-                                     QueueFamilyIndices indices) {
+                                     QueueFamilyIndices indices,
+                                     VkSurfaceKHR surface) {
   VkPhysicalDeviceProperties properties;
   vkGetPhysicalDeviceProperties(device, &properties);
 
@@ -145,24 +146,38 @@ static bool IsPhysicalDeviceSuitable(VkPhysicalDevice device,
   vkGetPhysicalDeviceFeatures(device, &features);
 
   if (!indices.graphics_family.has_value()) {
-    log::debug("   Device {} not suitable: missing graphics queue family",
+    log::debug("Device {} not suitable: missing graphics queue family",
                properties.deviceName);
     return false;
   }
 
   if (!indices.presentation_family.has_value()) {
-    log::debug("   Device {} not suitable: missing present queue family",
+    log::debug("Device {} not suitable: missing present queue family",
                properties.deviceName);
     return false;
   }
 
   if (!CheckDeviceExtensionSupport(device)) {
-    log::debug("   Device {} not suitable: missing required extenstion support",
+    log::debug("Device {} not suitable: missing required extenstion support",
                properties.deviceName);
     return false;
   }
 
-  log::debug("   Found suitable physical device {}", properties.deviceName);
+  SwapChainSupportDetails swap_chain_support =
+      QuerySwapChainSupport(device, surface);
+  if (swap_chain_support.formats.empty()) {
+    log::debug("Device {} not suitable: found no supported surface formats",
+               properties.deviceName);
+    return false;
+  }
+
+  if (swap_chain_support.present_modes.empty()) {
+    log::debug("Device {} not suitable: found no supported presentation modes",
+               properties.deviceName);
+    return false;
+  }
+
+  log::debug("Found suitable physical device {}", properties.deviceName);
   return true;
 }
 
@@ -197,7 +212,7 @@ Device::Device(Instance &instance, Surface &surface)
 
     indices = FindQueueFamilies(physical_device, surface.m_surface);
 
-    if (IsPhysicalDeviceSuitable(physical_device, indices)) {
+    if (IsPhysicalDeviceSuitable(physical_device, indices, surface.m_surface)) {
       m_physical_device = physical_device;
       break;
     }
