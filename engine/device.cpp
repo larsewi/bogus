@@ -174,6 +174,8 @@ Device::Device(Instance &instance, Surface &surface)
       static_cast<uint32_t>(queue_create_infos.size());
   logical_device_create_info.pQueueCreateInfos = queue_create_infos.data();
   logical_device_create_info.pEnabledFeatures = &physical_device_features;
+  logical_device_create_info.enabledExtensionCount = static_cast<uint32_t>(required_extensions.size());
+  logical_device_create_info.ppEnabledExtensionNames = required_extensions.data();
 
   if (vkCreateDevice(m_physical_device, &logical_device_create_info, nullptr,
                      &m_logical_device) != VK_SUCCESS) {
