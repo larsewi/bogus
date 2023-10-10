@@ -4,6 +4,7 @@
 
 #include "device.hpp"
 #include "logger.hpp"
+#include "swapchain.hpp"
 
 using namespace bogus;
 
@@ -14,61 +15,6 @@ struct QueueFamilyIndices {
   std::optional<uint32_t> graphics_family;
   std::optional<uint32_t> presentation_family;
 };
-
-struct SwapChainSupportDetails {
-  VkSurfaceCapabilitiesKHR capabilities;
-  std::vector<VkSurfaceFormatKHR> formats;
-  std::vector<VkPresentModeKHR> present_modes;
-};
-
-SwapChainSupportDetails QuerySwapChainSupport(VkPhysicalDevice device,
-                                              VkSurfaceKHR surface) {
-  log::debug("Querying physical device surface capabilities");
-  SwapChainSupportDetails details;
-  if (vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
-          device, surface, &details.capabilities) != VK_SUCCESS) {
-    throw DeviceException(
-        "Failed to query physical device surface capabilities");
-  }
-
-  log::debug("Querying number of physical device surface formats");
-  uint32_t count = 0;
-  if (vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &count, nullptr) !=
-      VK_SUCCESS) {
-    throw DeviceException(
-        "Failed to query number of physical device surface formats");
-  }
-
-  if (count > 0) {
-    log::debug("Getting physical device surface formats");
-    details.formats.resize(count);
-    if (vkGetPhysicalDeviceSurfaceFormatsKHR(
-            device, surface, &count, details.formats.data()) != VK_SUCCESS) {
-      throw DeviceException("Failed to get physical device surface formats");
-    }
-  }
-
-  count = 0;
-  log::debug("Querying number of physical device surface presentation modes");
-  if (vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &count,
-                                                nullptr) != VK_SUCCESS) {
-    throw DeviceException(
-        "Failed to query number of physical device surface presentation modes");
-  }
-
-  if (count > 0) {
-    log::debug("Getting physical device surface presentation modes");
-    details.present_modes.resize(count);
-    if (vkGetPhysicalDeviceSurfacePresentModesKHR(
-            device, surface, &count, details.present_modes.data()) !=
-        VK_SUCCESS) {
-      throw DeviceException(
-          "Failed to get physical device surface presentation modes");
-    }
-  }
-
-  return details;
-}
 
 static bool CheckDeviceExtensionSupport(VkPhysicalDevice device) {
 #ifndef NDEBUG
@@ -164,7 +110,7 @@ static bool IsPhysicalDeviceSuitable(VkPhysicalDevice device,
   }
 
   SwapChainSupportDetails swap_chain_support =
-      QuerySwapChainSupport(device, surface);
+      SwapChain::QuerySwapChainSupport(device, surface);
   if (swap_chain_support.formats.empty()) {
     log::debug("Device {} not suitable: found no supported surface formats",
                properties.deviceName);

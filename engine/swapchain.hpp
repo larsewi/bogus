@@ -1,16 +1,35 @@
-/**
- * @file swapchain.hpp
- * @author Lars Erik Wik
- * @brief The swap chain is essentially a queue of images that are waiting to be
- * presented to the screen.
- * @version 0.1
- * @date 2023-09-10
- *
- * @copyright Copyright (c) 2023
- *
- */
-
 #ifndef BOGUS_SWAPCHAIN_HPP
 #define BOGUS_SWAPCHAIN_HPP
+
+#include <stdexcept>
+#include <vulkan/vulkan.h>
+
+namespace bogus {
+
+struct SwapChainSupportDetails {
+  VkSurfaceCapabilitiesKHR capabilities;
+  std::vector<VkSurfaceFormatKHR> formats;
+  std::vector<VkPresentModeKHR> present_modes;
+};
+
+class SwapChainException : public std::exception {
+public:
+  SwapChainException(const std::string &message) : m_message(message) {}
+  virtual const char *what() const throw() { return m_message.c_str(); }
+
+private:
+  const std::string m_message;
+};
+
+class SwapChain {
+public:
+  SwapChain();
+  ~SwapChain();
+
+  static SwapChainSupportDetails QuerySwapChainSupport(VkPhysicalDevice device,
+                                                       VkSurfaceKHR surface);
+};
+
+} // namespace bogus
 
 #endif // BOGUS_SWAPCHAIN_HPP
